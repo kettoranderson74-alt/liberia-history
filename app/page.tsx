@@ -1,6 +1,12 @@
 import Image from "next/image";
-
-export default function Home() {
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+export default async function Home() {
+  const { data: latestArticles } = await supabase
+  .from("articles")
+  .select("*")
+  .order("created_at", { ascending: false })
+  .limit(6);
   return (
     <main className="min-h-screen bg-gray-50">
 
@@ -334,7 +340,43 @@ export default function Home() {
         </div>
 
       </section>
+<section className="max-w-6xl mx-auto py-12 px-6">
 
+  <h2 className="text-3xl font-bold text-green-700 mb-8 text-center">
+    Latest Liberia History Articles 🇱🇷
+  </h2>
+
+  <div className="grid md:grid-cols-3 gap-6">
+
+    {latestArticles?.map((article) => (
+
+      <div
+        key={article.slug}
+        className="bg-white rounded-xl shadow p-6"
+      >
+
+        <h3 className="text-xl font-bold">
+          {article.title}
+        </h3>
+
+        <p className="mt-3 text-gray-700">
+          {article.content.replace(/<[^>]*>/g, "").substring(0, 120)}...
+        </p>
+
+        <Link
+          href={`/articles/${article.slug}`}
+          className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg"
+        >
+          Read Article
+        </Link>
+
+      </div>
+
+    ))}
+
+  </div>
+
+</section>
     </main>
   );
 }
