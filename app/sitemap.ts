@@ -1,10 +1,22 @@
 import { MetadataRoute } from "next";
+import { supabase } from "@/lib/supabase";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+
   const baseUrl = "https://liberia-history-liberia.vercel.app";
 
+
+  const { data: articles } = await supabase
+    .from("articles")
+    .select("slug, created_at")
+    .eq("published", true);
+
+
+
   const pages = [
+
     "",
+
     "about",
     "history",
     "culture",
@@ -18,10 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "counties/map",
     "search",
 
-    // Articles
-    "articles/civil-war-history",
-    "articles/liberia-independence",
-    "articles/liberia-presidents",
 
     // Counties
     "counties/bomi",
@@ -40,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "counties/river-gee",
     "counties/sinoe",
 
+
     // Leaders
     "leaders/charles-taylor",
     "leaders/edward-roye",
@@ -50,10 +59,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "leaders/samuel-doe",
     "leaders/william-tolbert",
     "leaders/william-vs-tubman",
+
   ];
 
-  return pages.map((page) => ({
+
+
+  const staticPages = pages.map((page) => ({
+
     url: `${baseUrl}/${page}`,
+
     lastModified: new Date(),
+
+    changeFrequency: "weekly" as const,
+
+    priority: page === "" ? 1 : 0.8,
+
   }));
+
+
+
+
+  const articlePages = (articles || []).map((article) => ({
+
+    url: `${baseUrl}/articles/${article.slug}`,
+
+    lastModified: new Date(article.created_at),
+
+    changeFrequency: "monthly" as const,
+
+    priority: 0.7,
+
+  }));
+
+
+
+  return [
+
+    ...staticPages,
+
+    ...articlePages,
+
+  ];
+
 }

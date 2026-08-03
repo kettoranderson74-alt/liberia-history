@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const { data: articles } = await supabase
+  .from("articles")
+  .select("*")
+  .order("created_at", { ascending: false });
   return (
     <main className="min-h-screen bg-gray-50">
 
@@ -16,7 +21,42 @@ export default function ArticlesPage() {
           important events, and cultural heritage.
         </p>
       </section>
+{/* Published Articles From Database */}
+<section className="max-w-6xl mx-auto py-12 px-6">
 
+  <h2 className="text-3xl font-bold mb-8 text-center">
+    Latest Liberia History Articles 🇱🇷
+  </h2>
+
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {articles?.map((article) => (
+      <div
+        key={article.slug}
+        className="bg-white rounded-xl shadow p-6"
+      >
+
+        <h3 className="text-xl font-bold">
+          {article.title}
+        </h3>
+
+        <p className="mt-3 text-gray-700">
+          {article.content.substring(0, 150)}...
+        </p>
+
+        <Link
+          href={`/articles/${article.slug}`}
+          className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg"
+        >
+          Read Article
+        </Link>
+
+      </div>
+    ))}
+
+  </div>
+
+</section>
 
       {/* Articles */}
       <section className="max-w-6xl mx-auto py-12 px-6">
