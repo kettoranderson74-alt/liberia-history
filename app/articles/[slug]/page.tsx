@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { supabase } from "@/lib/supabase";
 
 export async function generateMetadata({
@@ -135,11 +133,12 @@ export default async function ArticleDetail({
           </p>
 
 
-          <div className="prose prose-lg max-w-none">
-  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-    {article.content}
-  </ReactMarkdown>
-</div>
+          <div
+  className="prose prose-lg max-w-none"
+  dangerouslySetInnerHTML={{
+    __html: article.content,
+  }}
+/>
 
 
         </div>

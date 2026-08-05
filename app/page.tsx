@@ -360,9 +360,17 @@ export default async function Home() {
           {article.title}
         </h3>
 
-        <p className="mt-3 text-gray-700">
-          {article.content.replace(/<[^>]*>/g, "").substring(0, 120)}...
-        </p>
+        {article.image_url && (
+  <img
+    src={article.image_url}
+    alt={article.title}
+    className="w-full h-48 object-cover rounded-lg mb-4"
+  />
+)}
+
+<p className="mt-3 text-gray-700">
+  {article.content.replace(/<[^>]*>/g, "").substring(0, 120)}...
+</p>
 
         <Link
           href={`/articles/${article.slug}`}
