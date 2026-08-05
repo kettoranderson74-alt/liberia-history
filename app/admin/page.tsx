@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Editor from "../components/Editor";
+
 export default function AdminPage() {
-const router = useRouter();
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState("");
   const [message, setMessage] = useState("");
   const [articles, setArticles] = useState<any[]>([]);
 
@@ -19,7 +18,6 @@ const router = useRouter();
 
 
   async function loadArticles() {
-
     const { data } = await supabase
       .from("articles")
       .select("*")
@@ -28,41 +26,33 @@ const router = useRouter();
     if (data) {
       setArticles(data);
     }
-
   }
 
 
-useEffect(() => {
+  useEffect(() => {
 
-  async function checkUser() {
+    async function checkUser() {
 
-    const { data } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
 
+      if (!data.user) {
+        router.push("/login");
+        return;
+      }
 
-    if (!data.user) {
-
-      router.push("/login");
-      return;
+      loadArticles();
 
     }
 
+    checkUser();
 
-    loadArticles();
-
-  }
-
-
-  checkUser();
-
-
-}, []);
+  }, []);
 
 
 
   function editArticle(article: any) {
 
     setTitle(article.title);
-    setCategory(article.category);
     setContent(article.content);
 
     setEditingTitle(article.title);
@@ -80,64 +70,22 @@ useEffect(() => {
       .from("articles")
       .update({
         title,
-        category,
         content,
       })
       .eq("title", editingTitle);
 
 
-
     if (error) {
-
       setMessage("Update error: " + error.message);
       return;
-
     }
 
 
     setMessage("✅ Article updated successfully!");
 
     setTitle("");
-setCategory("");
-setContent("");
-setImage(null);
-setImagePreview("");
-
-loadArticles();
-
-  }
-
-
-
-
-
-  async function deleteArticle(title: string) {
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this article?"
-    );
-
-
-    if (!confirmDelete) return;
-
-
-
-    const { error } = await supabase
-      .from("articles")
-      .delete()
-      .eq("title", title);
-
-
-
-    if (error) {
-
-      setMessage("Delete error: " + error.message);
-      return;
-
-    }
-
-
-    setMessage("✅ Article deleted successfully!");
+    setContent("");
+    setIsEditing(false);
 
     loadArticles();
 
@@ -145,65 +93,49 @@ loadArticles();
 
 
 
+  async function deleteArticle(id: number) {
+
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this article?"
+  );
+
+  if (!confirmDelete) return;
+
+
+  const { error } = await supabase
+    .from("articles")
+    .delete()
+    .eq("id", id);
+
+
+  if (error) {
+
+    setMessage("Delete error: " + error.message);
+    return;
+
+  }
+
+
+  setMessage("✅ Article deleted successfully!");
+
+  loadArticles();
+
+}
+
 
 
   async function addArticle() {
 
 
-    if (!title || !category || !content) {
+    if (!title || !content) {
 
-      setMessage("Please fill all required fields.");
+      setMessage("Please enter title and content.");
       return;
 
     }
 
 
     setMessage("Publishing...");
-
-
-
-    let imageUrl = "";
-
-
-
-    if (image) {
-
-
-      const fileName = `${Date.now()}-${image.name}`;
-
-
-
-      const { error: uploadError } =
-        await supabase.storage
-          .from("article-images")
-          .upload(fileName, image);
-
-
-
-      if (uploadError) {
-
-        setMessage(
-          "Image upload error: " + uploadError.message
-        );
-
-        return;
-
-      }
-
-
-
-      const { data } =
-        supabase.storage
-          .from("article-images")
-          .getPublicUrl(fileName);
-
-
-
-      imageUrl = data.publicUrl;
-
-    }
-
-
 
 
 
@@ -214,22 +146,18 @@ loadArticles();
 
 
 
-
-
     const { error } = await supabase
       .from("articles")
       .insert([
         {
           title,
           slug,
-          category,
-          image_url: imageUrl,
+          category: "Liberia History",
+          image_url: "",
           content,
           published: true,
         },
       ]);
-
-
 
 
 
@@ -241,33 +169,19 @@ loadArticles();
     }
 
 
-
     setMessage("✅ Article published successfully!");
 
-    setTitle("");
-    setCategory("");
-    setContent("");
-    setImage(null);
 
+    setTitle("");
+    setContent("");
 
     loadArticles();
 
-
-  }
-
-
-
-
-
-
-
-  return (
+  }  return (
 
     <main className="min-h-screen bg-gray-50 p-10">
 
-
       <div className="max-w-5xl mx-auto">
-
 
 
         <div className="bg-white p-8 rounded-xl shadow">
@@ -276,111 +190,41 @@ loadArticles();
           <h1 className="text-3xl font-bold text-green-700 mb-6">
             Liberia History Admin Dashboard 🇱🇷
           </h1>
-<button
-  onClick={async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  }}
-  className="bg-red-600 text-white px-4 py-2 rounded-lg mb-6"
->
-  Logout
-</button>
 
 
-
-          <input
-  type="file"
-  accept="image/*"
-  className="border p-3 w-full mb-4"
-  onChange={(e) => {
-
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    setImage(file);
-
-    setImagePreview(URL.createObjectURL(file));
-
-  }}
-/>
-
-
-
-
-          <select
-
-            className="border p-3 w-full mb-4 rounded"
-
-            value={category}
-
-            onChange={(e)=>setCategory(e.target.value)}
-
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              router.push("/login");
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg mb-6"
           >
-
-            <option value="">
-              Select category
-            </option>
-
-            <option>
-              Independence
-            </option>
-
-            <option>
-              Presidents
-            </option>
-
-            <option>
-              Counties
-            </option>
-
-            <option>
-              Culture
-            </option>
-
-            <option>
-              Civil War
-            </option>
-
-
-          </select>
-
-
-
-
-          <input
-
-            type="file"
-
-            accept="image/*"
-
-            className="border p-3 w-full mb-4"
-
-            onChange={(e)=>
-              setImage(e.target.files?.[0] || null)
-            }
-
-          />
-{imagePreview && (
-  <img
-    src={imagePreview}
-    alt="Preview"
-    className="w-full max-h-80 object-cover rounded-lg mb-4 border"
-  />
-)}
-
+            Logout
+          </button>
 
 
 
           <div className="mb-4">
 
-  <Editor
-    value={content}
-    onChange={setContent}
-  />
+            <input
 
-</div>
+              className="border p-3 w-full rounded mb-4"
 
+              placeholder="Article title"
+
+              value={title}
+
+              onChange={(e)=>setTitle(e.target.value)}
+
+            />
+
+
+            <Editor
+              value={content}
+              onChange={setContent}
+            />
+
+          </div>
 
 
 
@@ -401,10 +245,7 @@ loadArticles();
               : "Publish Article"
             }
 
-
           </button>
-
-
 
 
 
@@ -413,10 +254,7 @@ loadArticles();
           </p>
 
 
-
         </div>
-
-
 
 
 
@@ -425,12 +263,9 @@ loadArticles();
         <div className="bg-white mt-10 p-8 rounded-xl shadow">
 
 
-
           <h2 className="text-2xl font-bold mb-6">
             Published Articles
           </h2>
-
-
 
 
 
@@ -441,27 +276,21 @@ loadArticles();
 
               <tr className="bg-gray-100">
 
-
                 <th className="border p-3 text-left">
                   Title
                 </th>
-
 
                 <th className="border p-3 text-left">
                   Category
                 </th>
 
-
                 <th className="border p-3 text-left">
                   Actions
                 </th>
 
-
               </tr>
 
-
             </thead>
-
 
 
 
@@ -472,16 +301,21 @@ loadArticles();
               {articles.map((article)=>(
 
 
-                <tr key={article.title}>
+                <tr key={article.id}>
 
 
                   <td className="border p-3">
+
                     {article.title}
+
                   </td>
 
 
+
                   <td className="border p-3">
+
                     {article.category}
+
                   </td>
 
 
@@ -498,25 +332,24 @@ loadArticles();
 
                     >
                       Edit
-                    </button>
 
+                    </button>
 
 
 
                     <button
 
-                      onClick={() => deleteArticle(article.title)}
+                      onClick={() => deleteArticle(article.id)}
 
                       className="bg-red-600 text-white px-3 py-1 rounded"
 
                     >
                       Delete
+
                     </button>
 
 
-
                   </td>
-
 
 
                 </tr>
@@ -532,17 +365,13 @@ loadArticles();
           </table>
 
 
-
         </div>
-
 
 
       </div>
 
 
-
     </main>
-
 
   );
 

@@ -7,6 +7,7 @@ export default async function Home() {
   .select("*")
   .order("created_at", { ascending: false })
   .limit(6);
+  const featuredArticle = latestArticles?.[0];
   return (
     <main className="min-h-screen bg-gray-50">
 
@@ -375,7 +376,44 @@ export default async function Home() {
     ))}
 
   </div>
+{featuredArticle && (
+  <section className="max-w-6xl mx-auto px-6 py-10">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden md:grid md:grid-cols-2">
 
+      {featuredArticle.image_url && (
+        <img
+          src={featuredArticle.image_url}
+          alt={featuredArticle.title}
+          className="w-full h-full object-cover min-h-[350px]"
+        />
+      )}
+
+      <div className="p-8 flex flex-col justify-center">
+
+        <span className="inline-block bg-green-700 text-white px-4 py-1 rounded-full text-sm mb-4 w-fit">
+          Featured Article
+        </span>
+
+        <h2 className="text-4xl font-bold text-green-700 mb-4">
+          {featuredArticle.title}
+        </h2>
+
+        <p className="text-gray-700 mb-6">
+          {featuredArticle.content.replace(/<[^>]*>/g, "").substring(0, 220)}...
+        </p>
+
+        <Link
+          href={`/articles/${featuredArticle.slug}`}
+          className="inline-block bg-green-700 text-white px-6 py-3 rounded-lg w-fit"
+        >
+          Read Full Article →
+        </Link>
+
+      </div>
+
+    </div>
+  </section>
+)}
 </section>
     </main>
   );
