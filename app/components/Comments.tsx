@@ -16,11 +16,17 @@ export default function Comments({
 
   async function loadComments() {
 
-    const { data } = await supabase
-      .from("comments")
+    const { data, error } = await supabase
+      .from("Comment")
       .select("*")
       .eq("article_slug", articleSlug)
       .order("created_at", { ascending: false });
+
+
+    if (error) {
+      console.log(error.message);
+      return;
+    }
 
 
     if (data) {
@@ -32,7 +38,7 @@ export default function Comments({
 
   useEffect(() => {
     loadComments();
-  }, []);
+  }, [articleSlug]);
 
 
 
@@ -45,12 +51,12 @@ export default function Comments({
 
 
     const { error } = await supabase
-      .from("comments")
+      .from("Comment")
       .insert([
         {
           article_slug: articleSlug,
-          name,
-          comment,
+          name: name,
+          comment: comment,
         },
       ]);
 
@@ -71,7 +77,7 @@ export default function Comments({
 
 
   return (
-    <section className="mt-12 bg-white rounded-xl shadow p-6">
+    <section className="max-w-4xl mx-auto mt-10 bg-white rounded-xl shadow p-6">
 
       <h2 className="text-3xl font-bold text-green-700 mb-6">
         Visitor Comments 🇱🇷
@@ -103,10 +109,10 @@ export default function Comments({
       </button>
 
 
-
       <div className="mt-8 space-y-4">
 
         {comments.map((item)=>(
+
           <div
             key={item.id}
             className="border-b pb-4"
@@ -116,15 +122,18 @@ export default function Comments({
               {item.name}
             </h3>
 
+
             <p className="text-gray-700">
               {item.comment}
             </p>
+
 
             <p className="text-sm text-gray-400 mt-2">
               {new Date(item.created_at).toDateString()}
             </p>
 
           </div>
+
         ))}
 
       </div>
