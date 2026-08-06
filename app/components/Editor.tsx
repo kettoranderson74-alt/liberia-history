@@ -18,9 +18,13 @@ export default function Editor({
   const editor = useEditor({
 
     extensions: [
-      StarterKit,
-      Image,
-    ],
+  StarterKit.configure({
+    heading: {
+      levels: [1, 2, 3],
+    },
+  }),
+  Image,
+],
 
     content: value,
 
@@ -99,50 +103,18 @@ async function uploadImage(
 
     <div className="border rounded-lg p-4">
 
+<div className="flex gap-2 mb-4 flex-wrap">
 
-      <div className="flex gap-2 mb-4 flex-wrap">
-
-
-      <button
-  type="button"
-  onClick={() => fileInputRef.current?.click()}
-  className="bg-green-700 text-white px-3 py-1 rounded"
->
-  Add Image
-</button>
+  <button
+    type="button"
+    onClick={() => fileInputRef.current?.click()}
+    className="bg-green-700 text-white px-3 py-1 rounded"
+  >
+    Add Image
+  </button>
 
 
-
-        <button
-          type="button"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({
-              level: 2
-            }).run()
-          }
-          className="bg-gray-200 px-3 py-1 rounded"
-        >
-          Heading
-        </button>
-
-
-
-        <button
-          type="button"
-          onClick={() =>
-            editor.chain().focus().toggleBulletList().run()
-          }
-          className="bg-gray-200 px-3 py-1 rounded"
-        >
-          List
-        </button>
-
-
-
-        
-
-
-      </div>
+</div>
 
 
 <input
@@ -153,15 +125,17 @@ async function uploadImage(
   hidden
 />
 
-<EditorContent
-  editor={editor}
-  className="min-h-[250px]"
-/>
-      
+
+<div className="min-h-[250px] border p-4 prose prose-lg max-w-none">
+  <EditorContent
+    editor={editor}
+  />
+</div>
 
 
-    </div>
+</div>
 
   );
 
 }
+

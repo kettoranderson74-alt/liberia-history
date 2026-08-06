@@ -1,9 +1,11 @@
+import Comments from "@/app/components/Comments";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
-
+import TableOfContents from "@/app/components/TableOfContents";
 export async function generateMetadata({
+  
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -131,7 +133,7 @@ export default async function ArticleDetail({
           <p className="text-gray-500 mb-8">
             Published {new Date(article.created_at).toDateString()}
           </p>
-
+<TableOfContents content={article.content} />
 
           <div
   className="prose prose-lg max-w-none"
@@ -174,7 +176,13 @@ export default async function ArticleDetail({
 
         </div>
 
-      </article>
+      
+
+            </article>
+
+      <div className="max-w-4xl mx-auto">
+        <Comments articleSlug={article.slug} />
+      </div>
 
 
       {relatedArticles && relatedArticles.length > 0 && (
