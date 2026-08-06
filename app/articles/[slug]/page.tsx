@@ -139,7 +139,38 @@ export default async function ArticleDetail({
     __html: article.content,
   }}
 />
+<div className="mt-10 border-t pt-6">
+  <h3 className="text-2xl font-bold text-green-700 mb-4">
+    Share this article 🇱🇷
+  </h3>
 
+  <div className="flex flex-wrap gap-4">
+
+    <a
+      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://liberia-history-liberia.vercel.app/articles/${article.slug}`)}`}
+      target="_blank"
+      className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"
+    >
+      Share on Facebook
+    </a>
+
+    <a
+      href={`https://wa.me/?text=${encodeURIComponent(article.title + " https://liberia-history-liberia.vercel.app/articles/" + article.slug)}`}
+      target="_blank"
+      className="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold"
+    >
+      Share on WhatsApp
+    </a>
+
+    <a
+      href={`mailto:?subject=${encodeURIComponent(article.title)}&body=${encodeURIComponent(`Read this Liberia History article: https://liberia-history-liberia.vercel.app/articles/${article.slug}`)}`}
+      className="bg-gray-700 text-white px-5 py-2 rounded-lg font-semibold"
+    >
+      Email
+    </a>
+
+  </div>
+</div>
 
         </div>
 
