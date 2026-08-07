@@ -46,13 +46,13 @@ export const metadata: Metadata = {
 
   publisher: "Liberia History",
 
-  metadataBase: new URL("https://YOUR-DOMAIN.com"),
+  metadataBase: new URL("https://liberia-history-liberia.vercel.app"),
 
   openGraph: {
     title: "Liberia History",
     description:
       "Discover Liberia's history, leaders, counties, culture and historical events.",
-    url: "https://YOUR-DOMAIN.com",
+    url: "https://liberia-history-liberia.vercel.app",
     siteName: "Liberia History",
     locale: "en_US",
     type: "website",

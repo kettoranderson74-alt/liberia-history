@@ -45,11 +45,16 @@ export async function generateMetadata({
   }
 
 
-  const description = article.content.substring(0, 160);
+const plainText = article.content
+  .replace(/<[^>]*>/g, "")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const description = plainText.substring(0, 160);
 
 
   return {
-    title: `${article.title} | Liberia History`,
+    title: article.title,
     description,
 
     openGraph: {
@@ -109,22 +114,44 @@ export default async function ArticleDetail({
 
 
   const schema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.content.substring(0,160),
-    image: article.image_url ? [article.image_url] : [],
-    datePublished: article.created_at,
+ "@context":"https://schema.org",
+ "@type":"Article",
 
-    publisher:{
-      "@type":"Organization",
-      name:"Liberia History",
-      logo:{
-        "@type":"ImageObject",
-        url:"https://liberia-history-liberia.vercel.app/logo.png"
-      }
-    }
-  };
+ headline: article.title,
+
+ description: article.content
+ .replace(/<[^>]*>/g,"")
+ .replace(/\s+/g," ")
+ .trim()
+ .substring(0,160),
+
+ image:[
+  article.image_url ||
+  "https://liberia-history-liberia.vercel.app/logo.png"
+ ],
+
+ datePublished: article.created_at,
+
+ author:{
+  "@type":"Organization",
+  name:"Liberia History"
+ },
+
+ publisher:{
+  "@type":"Organization",
+  name:"Liberia History",
+  logo:{
+   "@type":"ImageObject",
+   url:"https://liberia-history-liberia.vercel.app/logo.png"
+  }
+ },
+
+ mainEntityOfPage:{
+  "@type":"WebPage",
+  "@id":`https://liberia-history-liberia.vercel.app/articles/${article.slug}`
+ }
+
+};
 
 
 
