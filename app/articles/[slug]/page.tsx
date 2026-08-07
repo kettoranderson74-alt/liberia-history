@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
-import TableOfContents from "@/app/components/TableOfContents";
 import Comments from "@/app/components/Comments";
 
 
@@ -200,7 +199,7 @@ export default async function ArticleDetail({
           </p>
 
 
-          <TableOfContents content={article.content} />
+          
 
 
           <div
