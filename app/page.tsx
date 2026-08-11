@@ -34,7 +34,7 @@ export default async function Home() {
       {/* Hero */}
       
 <section className="relative min-h-[600px] flex items-center overflow-hidden">
- <img src="/liberia-hero.webp"
+<img src="/images/liberia-hero.webp"
     alt="Liberia historical heritage"
     className="absolute inset-0 w-full h-full object-cover"
   />
