@@ -16,84 +16,84 @@ export default function RiverGeePage() {
       </section>
 
 
-      <section className="max-w-5xl mx-auto py-12 px-6">
+     <section className="max-w-5xl mx-auto py-12 px-6">
 
-        <div className="bg-white rounded-xl shadow p-8">
+  <div className="bg-white rounded-xl shadow p-8">
 
-          <Image
-            src="/images/counties/river-gee.png"
-            alt="River Gee County"
-            width={800}
-            height={450}
-            className="rounded-xl mx-auto"
-          />
+    <Image
+      src="/images/counties/river-gee.png"
+      alt="River Gee County"
+      width={800}
+      height={450}
+      className="rounded-xl mx-auto"
+    />
 
+    <h2 className="text-3xl font-bold mt-8">
+      Quick Facts
+    </h2>
 
-          <h2 className="text-3xl font-bold mt-8">
-            Overview
-          </h2>
+    <ul className="mt-4 space-y-2 text-lg text-gray-800">
+      <li>📍 Capital: Fish Town</li>
+      <li>🗺 Region: Southeastern Liberia</li>
+      <li>🌳 Known for: Forests, rivers, and agriculture</li>
+      <li>🇱🇷 County Status: One of Liberia's 15 counties</li>
+    </ul>
 
-          <p className="mt-4 text-lg text-gray-800">
-            River Gee County is located in southeastern Liberia. It is
-            known for its forests, rivers, agriculture, and strong
-            traditional communities.
-          </p>
+    <h2 className="text-3xl font-bold mt-8">
+      Overview
+    </h2>
 
+    <p className="mt-4 text-lg text-gray-800">
+      River Gee County is located in southeastern Liberia and is
+      known for its rich forests, rivers, fertile farmland, and
+      peaceful rural communities. It shares a border with Côte d'Ivoire.
+    </p>
 
-          <h2 className="text-3xl font-bold mt-8">
-            Capital
-          </h2>
+    <h2 className="text-3xl font-bold mt-8">
+      History
+    </h2>
 
-          <p className="mt-4 text-lg text-gray-800">
-            Fish Town is the capital city of River Gee County and serves
-            as the administrative center of the county.
-          </p>
+    <p className="mt-4 text-lg text-gray-800">
+      River Gee County was established in 2000 after being created
+      from parts of Grand Gedeh County. Since then, it has continued
+      to grow through agriculture, education, and local development.
+    </p>
 
+    <h2 className="text-3xl font-bold mt-8">
+      Culture & People
+    </h2>
 
-          <h2 className="text-3xl font-bold mt-8">
-            History
-          </h2>
+    <p className="mt-4 text-lg text-gray-800">
+      The county is home to several Liberian ethnic communities,
+      including the Grebo and Krahn peoples. Their traditions,
+      languages, music, and ceremonies remain an important part
+      of River Gee's identity.
+    </p>
 
-          <p className="mt-4 text-lg text-gray-800">
-            River Gee County was established in 2000 after being separated
-            from Grand Gedeh County. It has a history connected to the
-            indigenous communities of southeastern Liberia.
-          </p>
+    <h2 className="text-3xl font-bold mt-8">
+      Important Places
+    </h2>
 
+    <ul className="mt-4 space-y-2 text-lg text-gray-800">
+      <li>🏙 Fish Town</li>
+      <li>🌳 Forest reserves</li>
+      <li>🌾 Farming communities</li>
+      <li>🌊 River Gee waterways</li>
+    </ul>
 
-          <h2 className="text-3xl font-bold mt-8">
-            Culture
-          </h2>
+    <h2 className="text-3xl font-bold mt-8">
+      Historical Importance
+    </h2>
 
-          <p className="mt-4 text-lg text-gray-800">
-            River Gee's culture includes traditional ceremonies, music,
-            dance, storytelling, farming practices, and community values.
-          </p>
+    <p className="mt-4 text-lg text-gray-800">
+      River Gee County contributes to Liberia's agricultural
+      production and environmental conservation while preserving
+      the cultural traditions of its local communities.
+    </p>
 
+  </div>
 
-          <h2 className="text-3xl font-bold mt-8">
-            Important Places
-          </h2>
-
-          <p className="mt-4 text-lg text-gray-800">
-            The county is known for its rivers, forests, farming areas,
-            and rural communities.
-          </p>
-
-
-          <h2 className="text-3xl font-bold mt-8">
-            Historical Importance
-          </h2>
-
-          <p className="mt-4 text-lg text-gray-800">
-            River Gee represents Liberia's cultural diversity and the
-            importance of southeastern communities in the nation's history.
-          </p>
-
-        </div>
-
-      </section>
-
+</section>
     </main>
   );
 }
