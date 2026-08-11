@@ -201,13 +201,12 @@ export default async function ArticleDetail({
 
           
 
-
-          <div
-            className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{
-              __html:addHeadingIds(article.content),
-            }}
-          />
+<div
+  className="prose prose-lg max-w-none [&_p]:mb-5 [&_p:empty]:min-h-[1.5rem]"
+  dangerouslySetInnerHTML={{
+    __html: addHeadingIds(article.content),
+  }}
+/>
                     <div className="mt-10 border-t pt-6">
 
             <h3 className="text-2xl font-bold text-green-700 mb-4">
