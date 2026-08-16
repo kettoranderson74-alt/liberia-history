@@ -155,7 +155,7 @@ export default async function ArticleDetail({
 
 
   return (
-    <main className="min-h-screen bg-gray-50 py-10 px-6">
+   <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50 py-10 px-4 sm:px-6">
 
       <script
         type="application/ld+json"
@@ -165,7 +165,7 @@ export default async function ArticleDetail({
       />
 
 
-      <article className="max-w-4xl mx-auto bg-white rounded-xl shadow overflow-hidden">
+      <article className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow overflow-hidden">
 
 
         {article.image_url && (
@@ -202,7 +202,7 @@ export default async function ArticleDetail({
           
 
 <div
-  className="prose prose-lg max-w-none [&_p]:mb-5 [&_p:empty]:min-h-[1.5rem]"
+className="prose prose-lg max-w-none w-full min-w-0 break-words overflow-x-hidden [&_p]:mb-5 [&_p:empty]:min-h-[1.5rem] [&_img]:max-w-full [&_img]:h-auto [&_table]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_a]:break-words"
   dangerouslySetInnerHTML={{
     __html: addHeadingIds(article.content),
   }}

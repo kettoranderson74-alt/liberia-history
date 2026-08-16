@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-
+function stripHtml(html: string) {
+  return html
+    .replace(/<img[^>]*>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 export default async function ArticlesPage() {
   const { data: articles } = await supabase
   .from("articles")
@@ -32,21 +39,20 @@ export default async function ArticlesPage() {
 
     {articles?.map((article) => (
       <div
-        key={article.slug}
-        className="bg-white rounded-xl shadow p-6"
-      >
-
-        <h3 className="text-xl font-bold">
+  key={article.slug}
+  className="bg-white rounded-xl shadow p-6 flex flex-col h-full min-w-0 overflow-hidden"
+>
+        <h3 className="text-xl font-bold break-words line-clamp-2">
           {article.title}
         </h3>
 
-        <p className="mt-3 text-gray-700">
-          {article.content.substring(0, 150)}...
-        </p>
+       <p className="mt-3 text-gray-700 line-clamp-3 break-words">
+  {stripHtml(article.content).substring(0, 150)}...
+</p>
 
         <Link
           href={`/articles/${article.slug}`}
-          className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg"
+          className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg self-start"
         >
           Read Article
         </Link>
