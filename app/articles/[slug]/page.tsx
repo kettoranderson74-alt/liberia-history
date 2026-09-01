@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import Comments from "@/app/components/Comments";
-
+import ScrollToHash from "@/app/components/ScrollToHash";
 
 function addHeadingIds(content: string) {
   return content.replace(
@@ -155,8 +155,10 @@ export default async function ArticleDetail({
 
 
   return (
-   <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50 py-10 px-4 sm:px-6">
+  <>
+    <ScrollToHash />
 
+    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50 py-10 px-4 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -331,6 +333,7 @@ className="prose prose-lg max-w-none w-full min-w-0 break-words overflow-x-hidde
       )}
 
 
-    </main>
+       </main>
+  </>
   );
 }
