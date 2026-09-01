@@ -50,16 +50,26 @@ export default function Comments({
     }
 
 
-    const { error } = await supabase
-      .from("Comment")
-      .insert([
-        {
-          article_slug: articleSlug,
-          name: name,
-          comment: comment,
-        },
-      ]);
+   const {
+  data: { user },
+} = await supabase.auth.getUser();
 
+if (!user) {
+  alert("Please log in to post a comment.");
+  return;
+}
+
+const { data, error } = await supabase
+  .from("Comment")
+  .insert([
+    {
+      article_slug: articleSlug,
+      name: name,
+      comment: comment,
+      user_id: user.id,
+    },
+  ])
+  .select();
 
     if (error) {
       alert(error.message);
