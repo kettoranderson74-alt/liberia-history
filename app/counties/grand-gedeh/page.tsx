@@ -317,7 +317,7 @@ export default function GrandGedehPage() {
           <p className="mt-4 text-lg text-gray-800">
             According to Liberia's 2022 National Population and Housing
             Census, Grand Gedeh County had a population of
-            <strong> 216,692 people</strong.
+            <strong> 216,692 people</strong>.
           </p>
 
           <p className="mt-4 text-lg text-gray-800">

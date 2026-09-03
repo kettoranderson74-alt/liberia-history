@@ -52,7 +52,7 @@ export default function RiverGeePage() {
             rural communities, and a rich cultural heritage. The county
             shares Liberia's eastern frontier with Côte d'Ivoire, with the
             Cavalla River forming an important part of the international
-            boundary. :contentReference[oaicite:1]{index=1}
+            boundary. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -77,7 +77,7 @@ export default function RiverGeePage() {
             Liberia's major rivers and forms part of the country's boundary
             with Côte d'Ivoire. The river also plays an important role in
             the environmental and geographic character of southeastern
-            Liberia. :contentReference[oaicite:2]{index=2}
+            Liberia. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -88,7 +88,7 @@ export default function RiverGeePage() {
             River Gee became a separate county in <strong>May 2000</strong>.
             It was created from Grand Gedeh County following a process that
             began with approval by the House of Representatives in May 1997
-            and Senate approval in March 2000. :contentReference[oaicite:3]{index=3}
+            and Senate approval in March 2000.
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -185,7 +185,7 @@ export default function RiverGeePage() {
             Government agricultural programs have included River Gee among
             counties receiving support for smallholder farmers, agricultural
             equipment, processing facilities, farmer training, and improved
-            production. :contentReference[oaicite:4]{index=4}
+            production. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -203,7 +203,7 @@ export default function RiverGeePage() {
             Developing farm-to-market roads, processing facilities,
             irrigation, farmer organizations, and agricultural markets
             remains important for increasing the benefits farmers receive
-            from production. :contentReference[oaicite:5]{index=5}
+            from production. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -222,7 +222,7 @@ export default function RiverGeePage() {
             forest landscape. Community-based forestry programs have worked
             in River Gee to strengthen local participation in managing
             forest resources while protecting cultural and environmental
-            values. :contentReference[oaicite:6]{index=6}
+            values. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -253,12 +253,12 @@ export default function RiverGeePage() {
             international boundary between Liberia and Côte d'Ivoire.
           </p>
 
-          <p className="mt-4 text-lg text-gray-800">
-            Beyond its geographic importance, the river is part of the
-            environmental system supporting agriculture, forests,
-            communities, and aquatic ecosystems in the region.
-            :contentReference[oaicite:7]{index=7}
-          </p>
+         <p className="mt-4 text-lg text-gray-800">
+  Beyond its geographic importance, the river is part of the
+  environmental system supporting agriculture, forests,
+  communities, and aquatic ecosystems in the region.
+</p>
+            
 
           <h2 className="text-3xl font-bold mt-8">
             Cross-Border Connections
@@ -308,7 +308,7 @@ export default function RiverGeePage() {
             According to Liberia's 2022 Census, River Gee County had a
             population of <strong>124,653 people</strong>. The Liberian
             Senate identifies this as the county's 2022 Census population.
-            :contentReference[oaicite:8]{index=8}
+            
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -351,27 +351,27 @@ export default function RiverGeePage() {
             between Fish Town and communities throughout the county.
           </p>
 
-          <p className="mt-4 text-lg text-gray-800">
-            Recent agricultural development programs have also highlighted
-            poor road infrastructure and limited irrigation as continuing
-            challenges for rural farmers. :contentReference[oaicite:9]{index=9}
-          </p>
+         <p className="mt-4 text-lg text-gray-800">
+  Recent agricultural development programs have also highlighted
+  poor road infrastructure and limited irrigation as continuing
+  challenges for rural farmers.
+</p>
 
-          <h2 className="text-3xl font-bold mt-8">
-            Tourism and Cultural Heritage
-          </h2>
+<h2 className="text-3xl font-bold mt-8">
+  Tourism and Cultural Heritage
+</h2>
 
-          <p className="mt-4 text-lg text-gray-800">
-            River Gee has opportunities for community-based tourism based
-            on its forests, rural landscapes, cultural traditions, rivers,
-            and community life.
-          </p>
+<p className="mt-4 text-lg text-gray-800">
+  River Gee has opportunities for community-based tourism based
+  on its forests, rural landscapes, cultural traditions, rivers,
+  and community life.
+</p>
 
           <p className="mt-4 text-lg text-gray-800">
             Liberia's national tourism authority identifies River Gee
             cultural trails as an emerging destination connected to local
             communities, culture, and southeastern travel routes.
-            :contentReference[oaicite:10]{index=10}
+           
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -402,7 +402,7 @@ export default function RiverGeePage() {
             Government and development partners continue to support farmers
             through agricultural equipment, processing facilities, training,
             improved production methods, and market development.
-            :contentReference[oaicite:11]{index=11}
+            
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -410,7 +410,7 @@ export default function RiverGeePage() {
           </h2>
 
           <p className="mt-4 text-lg text-gray-800">
-            River Gee is environmentally important because of its forests,
+     River Gee is environmentally important because of its forests,
             rivers, wetlands, agricultural landscapes, and biodiversity.
             Protecting these resources is important not only for wildlife
             but also for the communities that depend on forests and rivers
@@ -422,7 +422,7 @@ export default function RiverGeePage() {
             from natural resources while reducing long-term environmental
             damage. Community-based forestry initiatives in River Gee have
             specifically worked to connect conservation with local
-            livelihoods and cultural heritage. :contentReference[oaicite:12]{index=12}
+            livelihoods and cultural heritage. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">

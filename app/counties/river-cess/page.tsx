@@ -57,7 +57,7 @@ export default function RiverCessPage() {
             Grand Bassa County to the west, Nimba County to the northeast,
             and Sinoe County to the southeast, while its southern side
             reaches the Atlantic Ocean. The county is among Liberia's
-            larger counties by land area. :contentReference[oaicite:1]{index=1}
+            larger counties by land area.
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -87,7 +87,7 @@ export default function RiverCessPage() {
             Grand Bassa County. The creation of the county was part of a
             broader period of administrative reorganization in Liberia.
             The Liberian Senate identifies 1984 as the year of the county's
-            creation. :contentReference[oaicite:2]{index=2}
+            creation. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -112,7 +112,7 @@ export default function RiverCessPage() {
             historical accounts connect the name with early Portuguese
             traders who visited the West African coast. A local historical
             account explains that the name was associated with baskets
-            produced and traded in the area. :contentReference[oaicite:3]{index=3}
+            produced and traded in the area. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -129,7 +129,7 @@ export default function RiverCessPage() {
             River Cess is home to several Liberian communities, with the
             Bassa people being particularly prominent. Liberia's national
             socio-economic data identifies Bassa as the dominant ethnic
-            group in River Cess and neighboring Grand Bassa County. :contentReference[oaicite:4]{index=4}
+            group in River Cess and neighboring Grand Bassa County.
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -184,7 +184,7 @@ export default function RiverCessPage() {
             The Ministry of Agriculture has recently emphasized River
             Cess's fertile land and agricultural potential, including
             opportunities to expand food production and develop the
-            county's coconut sector. :contentReference[oaicite:5]{index=5}
+            county's coconut sector.
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -202,7 +202,7 @@ export default function RiverCessPage() {
             River Cess is also recognized as one of Liberia's important
             artisanal fishing centers. Liberia's fisheries research
             identifies River Cess among the country's major fishing
-            locations. :contentReference[oaicite:6]{index=6}
+            locations. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -248,13 +248,13 @@ export default function RiverCessPage() {
             districts used for local governance and development planning.
             These different classifications reflect the distinction between
             statutory, electoral, and administrative structures used in
-            Liberia. :contentReference[oaicite:7]{index=7}
+            Liberia. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
             The administrative districts include Central River Cess,
             Norwein, Doedain, Jo River, Zarflahn, Fen River, Beawor,
-            and Sam Gbalor. :contentReference[oaicite:8]{index=8}
+            and Sam Gbalor. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -273,7 +273,7 @@ export default function RiverCessPage() {
             important during the First Liberian Civil War because of their
             river and coastal transportation connections. Historical
             accounts describe fighting and military movements in and
-            around Cestos during the conflict. :contentReference[oaicite:9]{index=9}
+            around Cestos during the conflict. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -285,7 +285,7 @@ export default function RiverCessPage() {
             River Cess County had a population of <strong>90,819 people</strong>.
             The census recorded approximately 10,895 people living in urban
             areas and 79,924 in rural areas, showing that River Cess remains
-            predominantly rural. :contentReference[oaicite:10]{index=10}
+            predominantly rural. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -321,7 +321,7 @@ export default function RiverCessPage() {
             Recent development efforts have included improving roads and
             communications infrastructure. Telecommunications coverage
             remains an important development challenge in several parts of
-            the county. :contentReference[oaicite:11]{index=11}
+            the county. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -354,7 +354,7 @@ export default function RiverCessPage() {
             Agriculture remains particularly important for food security
             and rural incomes. Government efforts to expand agricultural
             production and develop crops such as coconut reflect the
-            county's potential for greater economic growth. :contentReference[oaicite:12]{index=12}
+            county's potential for greater economic growth. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">

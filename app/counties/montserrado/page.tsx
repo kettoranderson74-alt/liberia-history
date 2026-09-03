@@ -287,7 +287,7 @@ export default function MontserradoPage() {
             The University of Liberia is one of the country&apos;s most
             important institutions of higher education. It was founded
             in 1862 as Liberia College and became a full university in
-            1951. :contentReference[oaicite:2]{index=2}
+            1951. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -452,7 +452,7 @@ export default function MontserradoPage() {
             LISGIS separately reports an urban population of
             1,761,032 for Montserrado in 2022; this is an urban
             population figure rather than the county&apos;s total
-            population. :contentReference[oaicite:3]{index=3}
+            population. 
           </p>
 
 

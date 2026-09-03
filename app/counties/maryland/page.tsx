@@ -133,7 +133,7 @@ export default function MarylandPage() {
             In 1857, Maryland was annexed to Liberia and became
             Maryland County. The Library of Congress records the
             transition from the independent state of Maryland to a
-            Liberian county during this period. :contentReference[oaicite:1]{index=1}
+            Liberian county during this period. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">

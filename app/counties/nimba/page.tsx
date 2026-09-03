@@ -160,14 +160,14 @@ export default function NimbaPage() {
             landscape and contains forests, grasslands, mountain
             habitats, springs, and exceptional biodiversity. UNESCO
             describes the Mount Nimba ecosystem as an important refuge
-            for rare and endemic species. :contentReference[oaicite:2]{index=2}
+            for rare and endemic species. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
             The highest point of Mount Nimba reaches approximately
             1,752 meters above sea level. The mountain is therefore
             not only a major geographic landmark but also an important
-            ecological resource for the region. :contentReference[oaicite:3]{index=3}
+            ecological resource for the region. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -185,7 +185,7 @@ export default function NimbaPage() {
             forests, wildlife, and local communities. UNESCO identifies
             the Liberian side of the Nimba ecosystem as an important
             component of the wider transboundary mountain environment.
-            :contentReference[oaicite:4]{index=4}
+          
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -247,7 +247,7 @@ export default function NimbaPage() {
             allowing responsible economic development is an important
             challenge for Nimba. The ecological importance of the
             Nimba massif has made environmental protection a regional
-            and international concern. :contentReference[oaicite:5]{index=5}
+            and international concern. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
@@ -415,7 +415,7 @@ export default function NimbaPage() {
           <p className="mt-4 text-lg text-gray-800">
             Liberia&apos;s 2022 National Population and Housing Census
             recorded approximately <strong>621,841 people</strong> in
-            Nimba County. :contentReference[oaicite:6]{index=6}
+            Nimba County. 
           </p>
 
           <p className="mt-4 text-lg text-gray-800">
@@ -488,7 +488,7 @@ export default function NimbaPage() {
           <p className="mt-4 text-lg text-gray-800">
             UNESCO describes the Mount Nimba landscape as an
             exceptionally biodiverse ecosystem with numerous plant and
-            animal species, including endemic species. :contentReference[oaicite:7]{index=7}
+            animal species, including endemic species. 
           </p>
 
           <h2 className="text-3xl font-bold mt-8">
