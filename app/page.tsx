@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { liberiaHistoryEvents } from "../lib/liberia-history-events";
 export default async function Home() {
   const { data: latestArticles } = await supabase
   .from("articles")
@@ -8,6 +9,73 @@ export default async function Home() {
   .order("created_at", { ascending: false })
   .limit(6);
   const featuredArticle = latestArticles?.[0];
+  const countyDescriptions: Record<string, string> = {
+  Bomi:
+    "Bomi is known for its historic iron-ore industry, especially around Tubmanburg, and its important place in Liberia's mining and economic history.",
+
+  Bong:
+    "Bong is an important agricultural county in central Liberia and was once home to the Bong Mining Company, one of the country's major historic iron-ore operations.",
+
+  Gbarpolu:
+    "Gbarpolu, created in 2001, is Liberia's youngest county and is known for its forests, mineral resources, and communities connected to the Gola forest landscape.",
+
+  "Grand Bassa":
+    "Grand Bassa has a long coastal history and is home to Buchanan, one of Liberia's major ports, while the Bassa people have contributed greatly to the country's history and culture.",
+
+  "Grand Cape Mount":
+    "Grand Cape Mount is famous for Lake Piso and the historic Vai people, whose unique writing system is an important part of Liberia's cultural heritage.",
+
+  "Grand Gedeh":
+    "Grand Gedeh is a southeastern county strongly associated with Krahn communities and the forests of southeastern Liberia, including areas connected to Grebo-Krahn National Park.",
+
+  "Grand Kru":
+    "Grand Kru has a strong maritime heritage, with communities such as Sasstown and Grand Cess historically connected to fishing, seafaring, trade, and Kru cultural traditions.",
+
+  Lofa:
+    "Lofa is an important agricultural region and is home to Mount Wuteve, Liberia's highest mountain, as well as diverse communities including the Lorma, Gbandi, and Kissi.",
+
+  Margibi:
+    "Margibi played an important role in Liberia's modern economic history through the Firestone rubber industry, while Harbel and the Booker Washington Institute became notable landmarks.",
+
+  Maryland:
+    "Maryland has deep historical ties to the former Republic of Maryland, which became part of Liberia in 1857, and its capital Harper remains an important center of southeastern heritage.",
+
+  Montserrado:
+    "Montserrado contains Monrovia, Liberia's capital and political center, and has been central to the country's independence, government, commerce, education, and national development.",
+
+  Nimba:
+    "Nimba is known for the Mount Nimba landscape, major iron-ore deposits, and commercial centers such as Ganta and Yekepa, making it important to Liberia's natural and economic history.",
+
+  "River Cess":
+    "River Cess is a coastal county whose history is closely connected to the Cestos River, fishing communities, forests, and Bassa cultural heritage.",
+
+  "River Gee":
+    "River Gee is a southeastern county known for its Grebo and Krahn communities, agricultural livelihoods, forest resources, and the Cavalla River along Liberia's border with Côte d'Ivoire.",
+
+  Sinoe:
+    "Sinoe is one of Liberia's historic coastal counties and is home to Greenville and Sapo National Park, making it important to Liberia's early history, forests, wildlife, and biodiversity.",
+};
+ const today = new Date();
+const month = today.getMonth() + 1;
+const day = today.getDate();
+
+const todayEvents = liberiaHistoryEvents[`${month}-${day}`] || [];
+
+const onThisDay =
+  todayEvents.length > 0
+    ? todayEvents
+    : [
+        {
+          date: today.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+          }),
+          title: "A Day in Liberian History",
+          description:
+            "No specific event has been added to our calendar for this date yet. Explore Liberia's history, leaders, counties, and culture to discover more stories from the country's past.",
+        },
+      ];
+ 
   return (
     <main className="min-h-screen bg-gray-50">
 
@@ -146,42 +214,50 @@ export default async function Home() {
     </div>
   </div>
 </section>
-
-      {/* Explore Sections */}
-      <section className="py-16">
+{/* Explore Liberia's History */}
+<section className="py-16">
   <div className="max-w-6xl mx-auto px-6">
 
     <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">
-      Featured Liberia Stories 🇱🇷
+      Explore Liberia's History 🇱🇷
     </h2>
 
     <div className="grid md:grid-cols-4 gap-6">
 
+      {/* Independence */}
       <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
         <div className="text-4xl mb-4">🇱🇷</div>
+
         <h3 className="text-xl font-bold mb-3">
-          Liberia Independence
+          Liberia's Independence
         </h3>
-        <p className="mb-4">
-          Learn how Liberia became Africa's first independent republic in 1847.
+
+        <p className="mb-4 text-gray-700">
+          Explore Liberia's journey to independence in 1847 and the
+          people and events that shaped the birth of the republic.
         </p>
+
         <a
           href="/articles/liberia-independence"
           className="font-semibold text-blue-700"
         >
-          Read More →
+          Read the Story →
         </a>
       </div>
 
-
+      {/* Leaders */}
       <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
         <div className="text-4xl mb-4">👑</div>
+
         <h3 className="text-xl font-bold mb-3">
-          Great Leaders
+          Presidents & Leaders
         </h3>
-        <p className="mb-4">
-          Discover the leaders who shaped Liberia's political journey.
+
+        <p className="mb-4 text-gray-700">
+          Meet the presidents and important leaders who influenced
+          Liberia's political, social, and national development.
         </p>
+
         <a
           href="/leaders"
           className="font-semibold text-blue-700"
@@ -190,32 +266,40 @@ export default async function Home() {
         </a>
       </div>
 
-
+      {/* Counties */}
       <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
-        <div className="text-4xl mb-4">📜</div>
+        <div className="text-4xl mb-4">🗺️</div>
+
         <h3 className="text-xl font-bold mb-3">
-          Civil War Era
+          Explore the 15 Counties
         </h3>
-        <p className="mb-4">
-          Understand Liberia's difficult years and its journey toward peace.
+
+        <p className="mb-4 text-gray-700">
+          Discover the history, people, geography, culture, and
+          important places found across Liberia's 15 counties.
         </p>
+
         <a
-          href="/articles/civil-war-history"
+          href="/counties"
           className="font-semibold text-blue-700"
         >
-          Read History →
+          Explore Counties →
         </a>
       </div>
 
-
+      {/* Culture */}
       <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
-        <div className="text-4xl mb-4">🌍</div>
+        <div className="text-4xl mb-4">🎭</div>
+
         <h3 className="text-xl font-bold mb-3">
           Culture & Heritage
         </h3>
-        <p className="mb-4">
-          Explore Liberia's traditions, languages, and identity.
+
+        <p className="mb-4 text-gray-700">
+          Learn about Liberia's languages, traditions, music, food,
+          communities, festivals, and cultural heritage.
         </p>
+
         <a
           href="/culture"
           className="font-semibold text-blue-700"
@@ -228,56 +312,6 @@ export default async function Home() {
 
   </div>
 </section>
-
-
-
-
-      {/* Featured Stories */}
-      <section className="max-w-6xl mx-auto py-16 px-6">
-
-        <h2 className="text-3xl font-bold text-center mb-10">
-          Featured Liberia Stories
-        </h2>
-
-
-        <div className="grid md:grid-cols-4 gap-6">
-
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            🇱🇷 Independence
-            <p className="mt-3">
-              Learn how Liberia became Africa's first independent republic.
-            </p>
-          </div>
-
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            👑 Great Leaders
-            <p className="mt-3">
-              Discover the people who shaped Liberia's history.
-            </p>
-          </div>
-
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            📜 Civil War Era
-            <p className="mt-3">
-              Understand Liberia's journey through conflict and peace.
-            </p>
-          </div>
-
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            🌍 Culture
-            <p className="mt-3">
-              Explore Liberia's traditions and identity.
-            </p>
-          </div>
-
-
-        </div>
-
-      </section>
 
 
 
@@ -297,14 +331,21 @@ export default async function Home() {
           <div className="mt-8 bg-white text-gray-900 rounded-xl p-8 shadow-lg">
 
 
-            <h3 className="text-2xl font-bold text-green-700">
-              July 26, 1847
-            </h3>
+            {onThisDay.map((event, index) => (
+  <div key={index} className={index > 0 ? "mt-8 border-t pt-8" : ""}>
+    <h3 className="text-2xl font-bold text-green-700">
+      {event.title}
+    </h3>
 
+    <p className="mt-2 text-sm font-semibold text-gray-500">
+      {event.date}
+    </p>
 
-            <p className="mt-4 text-lg">
-              Liberia declared independence and became Africa's first independent republic. Joseph Jenkins Roberts later became the country's first president, marking the beginning of a new chapter in Liberian history.
-            </p>
+    <p className="mt-4 text-lg">
+      {event.description}
+    </p>
+  </div>
+))}
 
 
 
@@ -364,8 +405,8 @@ export default async function Home() {
     </h3>
 
     <p className="mt-2 text-gray-700">
-      Discover the history, culture, and people of {county}.
-    </p>
+  {countyDescriptions[county]}
+</p>
 
     <div className="mt-4 text-blue-700 font-semibold">
       Explore County →

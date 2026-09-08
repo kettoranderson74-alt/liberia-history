@@ -49,22 +49,31 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://liberia-history-liberia.vercel.app"),
 
   openGraph: {
-    title: "Liberia History",
-    description:
-      "Discover Liberia's history, leaders, counties, culture and historical events.",
-    url: "https://liberia-history-liberia.vercel.app",
-    siteName: "Liberia History",
-    locale: "en_US",
-    type: "website",
-  },
+  title: "Liberia History",
+  description:
+    "Discover Liberia's history, leaders, counties, culture and historical events.",
+  url: "https://liberia-history-liberia.vercel.app",
+  siteName: "Liberia History",
+  locale: "en_US",
+  type: "website",
+
+  images: [
+    {
+      url: "/liberia-hero.png",
+      width: 1600,
+      height: 900,
+      alt: "Liberia History — Discover Liberia's past, leaders and culture",
+    },
+  ],
+},
 
   twitter: {
-    card: "summary_large_image",
-    title: "Liberia History",
-    description:
-      "Discover Liberia's history, leaders, counties and culture.",
-  },
-
+  card: "summary_large_image",
+  title: "Liberia History",
+  description:
+    "Discover Liberia's history, leaders, counties and culture.",
+  images: ["/liberia-hero.png"],
+},
   verification: {
     google: "NtywqRFlPnhWUASXRd14q_C34joUVWCMfKApQbgeQko",
   },
