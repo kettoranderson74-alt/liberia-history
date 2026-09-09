@@ -12,7 +12,7 @@ export default function AdminPage() {
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [articles, setArticles] = useState<any[]>([]);
-
+const [featuredImage, setFeaturedImage] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
@@ -52,27 +52,30 @@ export default function AdminPage() {
 
   function editArticle(article: any) {
 
-    setTitle(article.title);
-    setContent(article.content);
+  setTitle(article.title);
+  setContent(article.content);
 
-    setEditingTitle(article.title);
-    setIsEditing(true);
+  setFeaturedImage(article.image_url || "");
 
-    setMessage("Editing article...");
+  setEditingTitle(article.title);
+  setIsEditing(true);
 
-  }
+  setMessage("Editing article...");
+
+}
 
 
 
   async function updateArticle() {
 
     const { error } = await supabase
-      .from("articles")
-      .update({
-        title,
-        content,
-      })
-      .eq("title", editingTitle);
+  .from("articles")
+  .update({
+    title,
+    content,
+    image_url: featuredImage,
+  })
+  .eq("title", editingTitle);
 
 
     if (error) {
@@ -83,10 +86,10 @@ export default function AdminPage() {
 
     setMessage("✅ Article updated successfully!");
 
-    setTitle("");
-    setContent("");
-    setIsEditing(false);
-
+   setTitle("");
+setContent("");
+setFeaturedImage("");
+setIsEditing(false); 
     loadArticles();
 
   }
@@ -153,7 +156,7 @@ export default function AdminPage() {
           title,
           slug,
           category: "Liberia History",
-          image_url: "",
+          image_url: featuredImage,
           content,
           published: true,
         },
@@ -172,8 +175,9 @@ export default function AdminPage() {
     setMessage("✅ Article published successfully!");
 
 
-    setTitle("");
-    setContent("");
+   setTitle("");
+setContent("");
+setFeaturedImage("");
 
     loadArticles();
 
@@ -219,10 +223,11 @@ export default function AdminPage() {
             />
 
 
-            <Editor
-              value={content}
-              onChange={setContent}
-            />
+           <Editor
+  value={content}
+  onChange={setContent}
+  onFeaturedImageChange={setFeaturedImage}
+/>
 
           </div>
 

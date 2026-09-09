@@ -56,11 +56,22 @@ export default async function Home() {
     "Sinoe is one of Liberia's historic coastal counties and is home to Greenville and Sapo National Park, making it important to Liberia's early history, forests, wildlife, and biodiversity.",
 };
  const today = new Date();
-const month = today.getMonth() + 1;
-const day = today.getDate();
+
+const liberiaDate = new Intl.DateTimeFormat("en-US", {
+  timeZone: "Africa/Monrovia",
+  month: "numeric",
+  day: "numeric",
+}).formatToParts(today);
+
+const month = Number(
+  liberiaDate.find((part) => part.type === "month")?.value
+);
+
+const day = Number(
+  liberiaDate.find((part) => part.type === "day")?.value
+);
 
 const todayEvents = liberiaHistoryEvents[`${month}-${day}`] || [];
-
 const onThisDay =
   todayEvents.length > 0
     ? todayEvents

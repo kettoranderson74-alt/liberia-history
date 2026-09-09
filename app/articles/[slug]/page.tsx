@@ -21,13 +21,11 @@ function addHeadingIds(content: string) {
   );
 }
 
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-
   const { slug } = await params;
 
   const { data: article } = await supabase
@@ -36,21 +34,28 @@ export async function generateMetadata({
     .eq("slug", slug)
     .single();
 
-
   if (!article) {
     return {
       title: "Article Not Found | Liberia History",
+      description: "The requested Liberia History article could not be found.",
     };
   }
 
+  const plainText = article.content
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
-const plainText = article.content
-  .replace(/<[^>]*>/g, "")
-  .replace(/\s+/g, " ")
-  .trim();
+  const description =
+    plainText.length > 160
+      ? plainText.substring(0, 157) + "..."
+      : plainText;
 
-const description = plainText.substring(0, 160);
+  const articleUrl = `https://liberia-history-liberia.vercel.app/articles/${article.slug}`;
 
+  const featuredImage =
+    article.image_url ||
+    "https://liberia-history-liberia.vercel.app/liberia-hero.png";
 
   return {
     title: article.title,
@@ -59,19 +64,29 @@ const description = plainText.substring(0, 160);
     openGraph: {
       title: article.title,
       description,
-      images: article.image_url ? [article.image_url] : [],
+      url: articleUrl,
+      siteName: "Liberia History",
+      locale: "en_US",
       type: "article",
+
+      images: [
+        {
+          url: featuredImage,
+          width: 1600,
+          height: 900,
+          alt: article.title,
+        },
+      ],
     },
 
     twitter: {
       card: "summary_large_image",
       title: article.title,
       description,
-      images: article.image_url ? [article.image_url] : [],
+      images: [featuredImage],
     },
   };
 }
-
 
 
 export default async function ArticleDetail({
