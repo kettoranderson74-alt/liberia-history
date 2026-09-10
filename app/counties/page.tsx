@@ -49,7 +49,13 @@ export default async function CountiesPage() {
 
               <Link
                 key={county.id}
-               href={`/counties/${county.slug.replace("-county", "")}`}
+               href={
+  county.slug === "river-cess-county"
+    ? "/counties/rivercess"
+    : county.slug === "river-gee-county"
+    ? "/counties/rivergee"
+    : `/counties/${county.slug.replace("-county", "")}`
+}
                 className="bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition"
               >
 
