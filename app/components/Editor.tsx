@@ -17,21 +17,28 @@ export default function Editor({
   onFeaturedImageChange?: (url: string) => void;
 }) {
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-        },
-      }),
-      Image,
-    ],
+  extensions: [
+    StarterKit.configure({
+      heading: {
+        levels: [1, 2, 3],
+      },
+    }),
+    Image,
+  ],
 
-    content: value,
+  content: value,
 
-    onUpdate({ editor }) {
-      onChange(editor.getHTML());
+  editorProps: {
+    attributes: {
+      class:
+        "ProseMirror min-h-[300px] w-full outline-none cursor-text",
     },
-  });
+  },
+
+  onUpdate({ editor }) {
+    onChange(editor.getHTML());
+  },
+});
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState("");
@@ -40,30 +47,33 @@ export default function Editor({
    * Load images that already exist inside the article.
    */
  useEffect(() => {
-  if (!editor || !value) return;
+  if (!editor) return;
 
-  // Load the full article content into the editor
-  editor.commands.setContent(value);
+  if (value) {
+    const currentContent = editor.getHTML();
 
-  // Find all existing images in the article
-  const imageUrls: string[] = [];
-
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = value;
-
-  const images = tempDiv.querySelectorAll("img");
-
-  images.forEach((img) => {
-    const src = img.getAttribute("src");
-
-    if (src && !imageUrls.includes(src)) {
-      imageUrls.push(src);
+    if (currentContent !== value) {
+      editor.commands.setContent(value);
     }
-  });
 
-  setUploadedImages(imageUrls);
-}, [editor, value]);
+    const imageUrls: string[] = [];
 
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = value;
+
+    const images = tempDiv.querySelectorAll("img");
+
+    images.forEach((img) => {
+      const src = img.getAttribute("src");
+
+      if (src && !imageUrls.includes(src)) {
+        imageUrls.push(src);
+      }
+    });
+
+    setUploadedImages(imageUrls);
+  }
+}, [editor]);
   /*
    * Clear editor when creating a new article.
    */
@@ -201,9 +211,14 @@ export default function Editor({
         </div>
       )}
 
-      <div className="min-h-[250px] border p-4 prose prose-lg max-w-none">
-        <EditorContent editor={editor} />
-      </div>
+      <div className="border rounded-lg p-4 min-h-[350px]">
+  <EditorContent
+    editor={editor}
+    className="prose prose-lg max-w-none"
+  />
+
+  
+</div>
 
     </div>
   );

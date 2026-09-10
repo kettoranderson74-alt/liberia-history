@@ -1,57 +1,41 @@
-import Image from "next/image";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-const symbols = [
-  {
-    name: "Liberia Flag",
-    image: "/images/symbols/liberia-flag.png",
-    link: "/symbols/liberia-flag",
-    description:
-      "The national flag representing Liberia's independence, unity, and history."
-  },
-  {
-    name: "National Coat of Arms",
-    image: "/images/symbols/coat-of-arms.png",
-    link: "/symbols/coat-of-arms",
-    description:
-      "The national emblem showing Liberia's values, history, and progress."
-  },
-  {
-    name: "National Anthem",
-    image: "/images/symbols/national-anthem.png",
-    link: "/symbols/national-anthem",
-    description:
-      "Liberia's patriotic song expressing love and devotion to the nation."
-  },
-  {
-    name: "National Tree",
-    image: "/images/symbols/mahogany.png",
-    link: "/symbols/national-tree",
-    description:
-      "The Mahogany tree represents Liberia's natural resources and forests."
-  },
-  {
-    name: "National Bird",
-    image: "/images/symbols/national-bird.png",
-    link: "/symbols/national-bird",
-    description:
-      "The national bird represents Liberia's wildlife and natural heritage."
-  },
-  {
-    name: "National Flower",
-    image: "/images/symbols/national-flower.png",
-    link: "/symbols/national-flower",
-    description:
-      "The national flower represents Liberia's beauty and biodiversity."
+export default async function SymbolsPage() {
+  const { data: symbols, error } = await supabase
+    .from("symbols")
+    .select("id, title, slug, content, featured_image")
+    .eq("published", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <section className="bg-green-700 text-white py-16 px-6 text-center">
+          <h1 className="text-4xl font-bold">
+            Liberia's National Symbols
+          </h1>
+
+          <p className="mt-4 text-lg max-w-3xl mx-auto">
+            Discover the national symbols that represent Liberia's
+            history, identity, culture, and independence.
+          </p>
+        </section>
+
+        <section className="max-w-6xl mx-auto py-12 px-6">
+          <div className="bg-white rounded-xl shadow-sm border p-8 text-center">
+            <p className="text-red-600">
+              Unable to load national symbols.
+            </p>
+          </div>
+        </section>
+      </main>
+    );
   }
-];
 
-
-export default function SymbolsPage() {
   return (
     <main className="min-h-screen bg-gray-50">
-
       <section className="bg-green-700 text-white py-16 px-6 text-center">
-
         <h1 className="text-4xl font-bold">
           Liberia's National Symbols
         </h1>
@@ -60,50 +44,59 @@ export default function SymbolsPage() {
           Discover the national symbols that represent Liberia's
           history, identity, culture, and independence.
         </p>
-
       </section>
-
 
       <section className="max-w-6xl mx-auto py-12 px-6">
+        {symbols && symbols.length > 0 ? (
+          <div className="grid md:grid-cols-3 gap-8">
+            {symbols.map((symbol) => (
+              <Link
+                key={symbol.id}
+                href={`/symbols/${symbol.slug}`}
+                className="bg-white rounded-xl shadow hover:shadow-xl p-6 transition"
+              >
+                {symbol.featured_image ? (
+                  <img
+                    src={symbol.featured_image}
+                    alt={symbol.title}
+                    className="w-full h-[240px] object-cover rounded-xl"
+                  />
+                ) : (
+                  <div className="w-full h-[240px] bg-gray-200 rounded-xl flex items-center justify-center">
+                    <span className="text-gray-500">
+                      No image available
+                    </span>
+                  </div>
+                )}
 
-        <div className="grid md:grid-cols-3 gap-8">
+                <h2 className="text-2xl font-bold mt-5 text-green-700">
+                  {symbol.title}
+                </h2>
 
-          {symbols.map((symbol) => (
+                <p className="mt-3 text-gray-700 line-clamp-3">
+                  {symbol.content
+                    ?.replace(/<[^>]*>/g, "")
+                    .slice(0, 180)}
+                  {symbol.content &&
+                  symbol.content.replace(/<[^>]*>/g, "").length > 180
+                    ? "..."
+                    : ""}
+                </p>
 
-            <a
-              key={symbol.name}
-              href={symbol.link}
-              className="bg-white rounded-xl shadow hover:shadow-xl p-6 transition"
-            >
-
-              <Image
-                src={symbol.image}
-                alt={symbol.name}
-                width={400}
-                height={300}
-                className="rounded-xl mx-auto"
-              />
-
-              <h2 className="text-2xl font-bold mt-5 text-green-700">
-                {symbol.name}
-              </h2>
-
-              <p className="mt-3 text-gray-700">
-                {symbol.description}
-              </p>
-
-              <p className="mt-5 text-green-700 font-bold">
-                Learn More →
-              </p>
-
-            </a>
-
-          ))}
-
-        </div>
-
+                <p className="mt-5 text-green-700 font-bold">
+                  Learn More
+                </p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm border p-10 text-center">
+            <p className="text-gray-500">
+              No national symbols have been published yet.
+            </p>
+          </div>
+        )}
       </section>
-
     </main>
   );
 }
