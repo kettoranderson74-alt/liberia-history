@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+
+export const dynamic = "force-dynamic";
+
 function stripHtml(html: string) {
   return html
     .replace(/<img[^>]*>/gi, "")
@@ -9,18 +12,21 @@ function stripHtml(html: string) {
     .replace(/\s+/g, " ")
     .trim();
 }
+
 export default async function ArticlesPage() {
   const { data: articles } = await supabase
-  .from("articles")
-  .select("*")
-  .order("created_at", { ascending: false });
+    .from("articles")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false });
+
   return (
     <main className="min-h-screen bg-gray-50">
 
       {/* Header */}
       <section className="bg-green-700 text-white py-16 px-6 text-center">
         <h1 className="text-4xl font-bold">
-          Liberia History Articles 🇱🇷
+          Liberia History Articles
         </h1>
 
         <p className="mt-4 text-lg max-w-3xl mx-auto">
@@ -28,47 +34,78 @@ export default async function ArticlesPage() {
           important events, and cultural heritage.
         </p>
       </section>
-{/* Published Articles From Database */}
-<section className="max-w-6xl mx-auto py-12 px-6">
 
-  <h2 className="text-3xl font-bold mb-8 text-center">
-    Latest Liberia History Articles 🇱🇷
-  </h2>
+      {/* Published Articles From Database */}
+      <section className="max-w-6xl mx-auto py-12 px-6">
 
-  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          Latest Liberia History Articles
+        </h2>
 
-    {articles?.map((article) => (
-      <div
-  key={article.slug}
-  className="bg-white rounded-xl shadow p-6 flex flex-col h-full min-w-0 overflow-hidden"
->
-        <h3 className="text-xl font-bold break-words line-clamp-2">
-          {article.title}
-        </h3>
+        {articles && articles.length > 0 ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-       <p className="mt-3 text-gray-700 line-clamp-3 break-words">
-  {stripHtml(article.content).substring(0, 150)}...
-</p>
+            {articles.map((article) => (
+              <div
+                key={article.id}
+                className="bg-white rounded-xl shadow hover:shadow-xl transition overflow-hidden flex flex-col h-full min-w-0"
+              >
 
-        <Link
-          href={`/articles/${article.slug}`}
-          className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg self-start"
-        >
-          Read Article
-        </Link>
+                {/* Featured Image */}
+                <div className="w-full h-56 bg-gray-200 overflow-hidden">
+                  {article.image_url ? (
+                    <Image
+                      src={article.image_url}
+                      alt={article.title}
+                      width={800}
+                      height={500}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">
+                      No image available
+                    </div>
+                  )}
+                </div>
 
-      </div>
-    ))}
+                {/* Article Information */}
+                <div className="p-6 flex flex-col flex-1">
 
-  </div>
+                  <h3 className="text-xl font-bold break-words line-clamp-2">
+                    {article.title}
+                  </h3>
 
-</section>
+                  <p className="mt-3 text-gray-700 line-clamp-3 break-words">
+                    {stripHtml(article.content).substring(0, 150)}...
+                  </p>
 
-      {/* Articles */}
+                  <Link
+                    href={`/articles/${article.slug}`}
+                    className="inline-block mt-5 bg-green-700 text-white px-5 py-2 rounded-lg self-start"
+                  >
+                    Read Article
+                  </Link>
+
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500">
+              No published articles available.
+            </p>
+          </div>
+        )}
+
+      </section>
+
+      {/* Existing Articles */}
       <section className="max-w-6xl mx-auto py-12 px-6">
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-
 
           {/* Birth of Liberia */}
           <div className="bg-white rounded-xl shadow p-6">
@@ -99,8 +136,6 @@ export default async function ArticlesPage() {
 
           </div>
 
-
-
           {/* Independence */}
           <div className="bg-white rounded-xl shadow p-6">
 
@@ -129,8 +164,6 @@ export default async function ArticlesPage() {
             </Link>
 
           </div>
-
-
 
           {/* Presidents */}
           <div className="bg-white rounded-xl shadow p-6">
@@ -161,8 +194,6 @@ export default async function ArticlesPage() {
 
           </div>
 
-
-
           {/* Civil War */}
           <div className="bg-white rounded-xl shadow p-6">
 
@@ -191,8 +222,6 @@ export default async function ArticlesPage() {
             </Link>
 
           </div>
-
-
 
           {/* Culture */}
           <div className="bg-white rounded-xl shadow p-6">
@@ -223,8 +252,6 @@ export default async function ArticlesPage() {
 
           </div>
 
-
-
           {/* National Symbols */}
           <div className="bg-white rounded-xl shadow p-6">
 
@@ -253,7 +280,6 @@ export default async function ArticlesPage() {
             </Link>
 
           </div>
-
 
         </div>
 
