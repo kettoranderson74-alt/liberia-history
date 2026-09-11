@@ -346,11 +346,12 @@ function toggleSource(sourceId: string) {
                   onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <Editor
-                  value={content}
-                  onChange={setContent}
-                  onFeaturedImageChange={setFeaturedImage}
-                />
+               <Editor
+  value={content}
+  featuredImage={featuredImage}
+  onChange={setContent}
+  onFeaturedImageChange={setFeaturedImage}
+/>
                 <div className="mt-6 border rounded-lg p-5">
   <h3 className="text-lg font-bold text-gray-800 mb-3">
     Sources

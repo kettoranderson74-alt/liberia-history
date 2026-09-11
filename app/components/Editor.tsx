@@ -10,83 +10,96 @@ import { v4 as uuidv4 } from "uuid";
 export default function Editor({
   value,
   onChange,
+  featuredImage: externalFeaturedImage = "",
   onFeaturedImageChange,
 }: {
   value: string;
   onChange: (value: string) => void;
+  featuredImage?: string;
   onFeaturedImageChange?: (url: string) => void;
 }) {
   const editor = useEditor({
-  extensions: [
-    StarterKit.configure({
-      heading: {
-        levels: [1, 2, 3],
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+      Image,
+    ],
+
+    content: value,
+
+    editorProps: {
+      attributes: {
+        class:
+          "ProseMirror min-h-[300px] w-full outline-none cursor-text",
       },
-    }),
-    Image,
-  ],
-
-  content: value,
-
-  editorProps: {
-    attributes: {
-      class:
-        "ProseMirror min-h-[300px] w-full outline-none cursor-text",
     },
-  },
 
-  onUpdate({ editor }) {
-    onChange(editor.getHTML());
-  },
-});
+    onUpdate({ editor }) {
+      onChange(editor.getHTML());
+    },
+  });
 
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState("");
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   /*
-   * Load images that already exist inside the article.
-   */
- useEffect(() => {
-  if (!editor) return;
-
-  if (value) {
-    const currentContent = editor.getHTML();
-
-    if (currentContent !== value) {
-      editor.commands.setContent(value);
-    }
-
-    const imageUrls: string[] = [];
-
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = value;
-
-    const images = tempDiv.querySelectorAll("img");
-
-    images.forEach((img) => {
-      const src = img.getAttribute("src");
-
-      if (src && !imageUrls.includes(src)) {
-        imageUrls.push(src);
-      }
-    });
-
-    setUploadedImages(imageUrls);
-  }
-}, [editor]);
-  /*
-   * Clear editor when creating a new article.
+   * Load existing article content and images whenever
+   * the article being edited changes.
    */
   useEffect(() => {
-    if (editor && value === "") {
+    if (!editor) return;
+
+    if (value) {
+      const currentContent = editor.getHTML();
+
+      if (currentContent !== value) {
+        editor.commands.setContent(value);
+      }
+
+      const imageUrls: string[] = [];
+
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = value;
+
+      const images = tempDiv.querySelectorAll("img");
+
+      images.forEach((img) => {
+        const src = img.getAttribute("src");
+
+        if (src && !imageUrls.includes(src)) {
+          imageUrls.push(src);
+        }
+      });
+
+      setUploadedImages(imageUrls);
+
+      /*
+       * Restore the article's existing featured image.
+       * If there is no saved featured image, use the first
+       * image from the article as a fallback.
+       */
+      if (externalFeaturedImage) {
+        setFeaturedImage(externalFeaturedImage);
+      } else if (imageUrls.length > 0) {
+        setFeaturedImage(imageUrls[0]);
+      } else {
+        setFeaturedImage("");
+      }
+    } else {
       editor.commands.clearContent();
       setUploadedImages([]);
       setFeaturedImage("");
     }
-  }, [value, editor]);
+  }, [editor, value, externalFeaturedImage]);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  /*
+   * Upload a new article image.
+   */
   async function uploadImage(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
@@ -111,7 +124,9 @@ export default function Editor({
 
     const imageUrl = data.publicUrl;
 
-    // Add image to article
+    /*
+     * Add the image directly into the article.
+     */
     editor
       .chain()
       .focus()
@@ -120,16 +135,29 @@ export default function Editor({
       })
       .run();
 
-    // Add image to featured-image selection
-    setUploadedImages((prev) => [...prev, imageUrl]);
+    /*
+     * Add it to the available article images.
+     */
+    setUploadedImages((prev) => {
+      if (prev.includes(imageUrl)) {
+        return prev;
+      }
 
-    // Automatically make first image the featured image
+      return [...prev, imageUrl];
+    });
+
+    /*
+     * Automatically make the first uploaded image
+     * the featured image.
+     */
     if (!featuredImage) {
       setFeaturedImage(imageUrl);
       onFeaturedImageChange?.(imageUrl);
     }
 
-    // Allow the same file to be selected again
+    /*
+     * Allow the same file to be selected again.
+     */
     e.target.value = "";
   }
 
@@ -200,7 +228,7 @@ export default function Editor({
                   }`}
                 >
                   {featuredImage === url
-                    ? "⭐ Featured"
+                    ? "Featured"
                     : "Set as Featured"}
                 </button>
 
@@ -212,13 +240,13 @@ export default function Editor({
       )}
 
       <div className="border rounded-lg p-4 min-h-[350px]">
-  <EditorContent
-    editor={editor}
-    className="prose prose-lg max-w-none"
-  />
 
-  
-</div>
+        <EditorContent
+          editor={editor}
+          className="prose prose-lg max-w-none"
+        />
+
+      </div>
 
     </div>
   );

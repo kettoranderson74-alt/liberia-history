@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Editor from "../../components/Editor";
 
 type Person = {
   id: string;
   name: string;
   slug: string;
-    leadership_years: string | null;
+  leadership_years: string | null;
   profile_url: string | null;
   short_bio: string | null;
   biography: string | null;
@@ -25,9 +26,9 @@ export default function PeopleManager() {
   const [people, setPeople] = useState<Person[]>([]);
 
   const [name, setName] = useState("");
-const [leadershipYears, setLeadershipYears] = useState("");
-const [profileUrl, setProfileUrl] = useState("");
-const [shortBio, setShortBio] = useState("");
+  const [leadershipYears, setLeadershipYears] = useState("");
+  const [profileUrl, setProfileUrl] = useState("");
+  const [shortBio, setShortBio] = useState("");
   const [biography, setBiography] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [deathDate, setDeathDate] = useState("");
@@ -36,13 +37,16 @@ const [shortBio, setShortBio] = useState("");
   const [role, setRole] = useState("");
   const [era, setEra] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+
   const [uploadingImage, setUploadingImage] = useState(false);
   const [published, setPublished] = useState(true);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   async function loadPeople() {
     const { data, error } = await supabase
       .from("people")
@@ -70,12 +74,48 @@ const imageInputRef = useRef<HTMLInputElement>(null);
       .replace(/--+/g, "-");
   }
 
+  /*
+   * The database keeps birth_date as a date.
+   *
+   * Admin uses:
+   * YYYY-MM
+   *
+   * Database stores:
+   * YYYY-MM-01
+   *
+   * The day is only an internal storage value.
+   */
+  function formatBirthDateForDatabase(value: string) {
+    if (!value) return null;
+
+    if (/^\d{4}-\d{2}$/.test(value)) {
+      return `${value}-01`;
+    }
+
+    return value;
+  }
+
+  function formatBirthDateForInput(value: string | null) {
+    if (!value) return "";
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value.slice(0, 7);
+    }
+
+    if (/^\d{4}-\d{2}$/.test(value)) {
+      return value;
+    }
+
+    return "";
+  }
+
   function resetForm() {
-  setEditingId(null);
-  setName("");
-  setLeadershipYears("");
-  setProfileUrl("");
-  setShortBio("");
+    setEditingId(null);
+    setName("");
+    setLeadershipYears("");
+    setProfileUrl("");
+    setShortBio("");
+    setBiography("");
     setBirthDate("");
     setDeathDate("");
     setBirthplace("");
@@ -84,19 +124,17 @@ const imageInputRef = useRef<HTMLInputElement>(null);
     setEra("");
     setImageUrl("");
     setPublished(true);
-    setEditingId(null);
     setMessage("");
   }
 
- function editPerson(person: Person) {
-  setEditingId(person.id);
-  setName(person.name);
-  setLeadershipYears(person.leadership_years || "");
-  setProfileUrl(person.profile_url || "");
-  setShortBio(person.short_bio || "");
+  function editPerson(person: Person) {
+    setEditingId(person.id);
+    setName(person.name);
+    setLeadershipYears(person.leadership_years || "");
+    setProfileUrl(person.profile_url || "");
     setShortBio(person.short_bio || "");
     setBiography(person.biography || "");
-    setBirthDate(person.birth_date || "");
+    setBirthDate(formatBirthDateForInput(person.birth_date));
     setDeathDate(person.death_date || "");
     setBirthplace(person.birthplace || "");
     setCounty(person.county || "");
@@ -107,38 +145,40 @@ const imageInputRef = useRef<HTMLInputElement>(null);
 
     setMessage("Editing person...");
   }
-async function uploadProfileImage(
-  e: React.ChangeEvent<HTMLInputElement>
-) {
-  const file = e.target.files?.[0];
 
-  if (!file) return;
+  async function uploadProfileImage(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = e.target.files?.[0];
 
-  setUploadingImage(true);
+    if (!file) return;
 
-  const fileName = `${crypto.randomUUID()}-${file.name}`;
+    setUploadingImage(true);
 
-  const { error } = await supabase.storage
-    .from("article-images")
-    .upload(fileName, file);
+    const fileName = `${crypto.randomUUID()}-${file.name}`;
 
-  if (error) {
-    setMessage("Image upload error: " + error.message);
+    const { error } = await supabase.storage
+      .from("article-images")
+      .upload(fileName, file);
+
+    if (error) {
+      setMessage("Image upload error: " + error.message);
+      setUploadingImage(false);
+      return;
+    }
+
+    const { data } = supabase.storage
+      .from("article-images")
+      .getPublicUrl(fileName);
+
+    setImageUrl(data.publicUrl);
     setUploadingImage(false);
-    return;
+
+    setMessage("Profile image uploaded successfully.");
+
+    e.target.value = "";
   }
 
-  const { data } = supabase.storage
-    .from("article-images")
-    .getPublicUrl(fileName);
-
-  setImageUrl(data.publicUrl);
-  setUploadingImage(false);
-
-  setMessage("✅ Profile image uploaded successfully!");
-
-  e.target.value = "";
-}
   async function savePerson() {
     if (!name.trim()) {
       setMessage("Please enter a person's name.");
@@ -153,15 +193,27 @@ async function uploadProfileImage(
 
     const personData = {
       name: name.trim(),
-      leadership_years: leadershipYears,
-profile_url: `/leaders/${createSlug(name)}`,
+      leadership_years: leadershipYears.trim() || null,
+      profile_url: `/leaders/${createSlug(name)}`,
       slug: createSlug(name),
       short_bio: shortBio.trim() || null,
+
+      // Keep the rich HTML exactly as produced by the Editor.
       biography: biography.trim() || null,
-      birth_date: birthDate || null,
+
+      // Store selected month/year as YYYY-MM-01.
+      birth_date: formatBirthDateForDatabase(birthDate),
       death_date: deathDate || null,
+
       birthplace: birthplace.trim() || null,
+
+      /*
+       * Admin displays this as Country.
+       * We intentionally keep the existing county
+       * database column to protect existing records.
+       */
       county: county.trim() || null,
+
       role: role.trim() || null,
       era: era.trim() || null,
       image_url: imageUrl.trim() || null,
@@ -193,8 +245,8 @@ profile_url: `/leaders/${createSlug(name)}`,
 
     setMessage(
       editingId
-        ? "✅ Person updated successfully!"
-        : "✅ Person added successfully!"
+        ? "Person updated successfully."
+        : "Person added successfully."
     );
 
     resetForm();
@@ -220,7 +272,7 @@ profile_url: `/leaders/${createSlug(name)}`,
       return;
     }
 
-    setMessage("✅ Person deleted successfully!");
+    setMessage("Person deleted successfully.");
 
     await loadPeople();
   }
@@ -277,7 +329,7 @@ profile_url: `/leaders/${createSlug(name)}`,
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-          {/* Name */}
+          {/* Full Name */}
           <div className="md:col-span-2">
             <label className="block font-semibold mb-2">
               Full Name
@@ -291,35 +343,44 @@ profile_url: `/leaders/${createSlug(name)}`,
               className="w-full border rounded-lg p-3"
             />
           </div>
-<div>
-  <label className="block font-semibold mb-1">
-    Leadership Years
-  </label>
-  <input
-    type="text"
-    value={leadershipYears}
-    onChange={(e) => setLeadershipYears(e.target.value)}
-    placeholder="Example: 2006–2018"
-    className="border p-3 w-full rounded"
-  />
-</div>
 
-<div>
-  <label className="block font-semibold mb-1">
-    Profile URL
-  </label>
+          {/* Leadership Years */}
+          <div>
+            <label className="block font-semibold mb-1">
+              Leadership Years
+            </label>
 
-  <input
-    type="text"
-    value={profileUrl || `/leaders/${createSlug(name)}`}
-    readOnly
-    className="border p-3 w-full rounded bg-gray-100 text-gray-600"
-  />
+            <input
+              type="text"
+              value={leadershipYears}
+              onChange={(e) =>
+                setLeadershipYears(e.target.value)
+              }
+              placeholder="Example: 1848–1856"
+              className="border p-3 w-full rounded"
+            />
+          </div>
 
-  <p className="text-xs text-gray-500 mt-1">
-    Automatically generated from the person's name.
-  </p>
-</div>
+          {/* Profile URL */}
+          <div>
+            <label className="block font-semibold mb-1">
+              Profile URL
+            </label>
+
+            <input
+              type="text"
+              value={
+                profileUrl || `/leaders/${createSlug(name)}`
+              }
+              readOnly
+              className="border p-3 w-full rounded bg-gray-100 text-gray-600"
+            />
+
+            <p className="text-xs text-gray-500 mt-1">
+              Automatically generated from the person's name.
+            </p>
+          </div>
+
           {/* Short Bio */}
           <div className="md:col-span-2">
             <label className="block font-semibold mb-2">
@@ -335,19 +396,23 @@ profile_url: `/leaders/${createSlug(name)}`,
             />
           </div>
 
-          {/* Biography */}
+          {/* Full Biography */}
           <div className="md:col-span-2">
             <label className="block font-semibold mb-2">
               Full Biography
             </label>
 
-            <textarea
-              value={biography}
-              onChange={(e) => setBiography(e.target.value)}
-              placeholder="Write the person's full biography..."
-              rows={8}
-              className="w-full border rounded-lg p-3"
-            />
+            <div className="border rounded-lg p-4">
+              <Editor
+                value={biography}
+                onChange={setBiography}
+              />
+            </div>
+
+            <p className="text-xs text-gray-500 mt-2">
+              Press Enter for paragraphs. Select text and press Ctrl+B
+              to make it bold.
+            </p>
           </div>
 
           {/* Birth Date */}
@@ -357,11 +422,15 @@ profile_url: `/leaders/${createSlug(name)}`,
             </label>
 
             <input
-              type="date"
+              type="month"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
               className="w-full border rounded-lg p-3"
             />
+
+            <p className="text-xs text-gray-500 mt-1">
+              Select the birth month and year.
+            </p>
           </div>
 
           {/* Death Date */}
@@ -393,17 +462,17 @@ profile_url: `/leaders/${createSlug(name)}`,
             />
           </div>
 
-          {/* County */}
+          {/* Country */}
           <div>
             <label className="block font-semibold mb-2">
-              County
+              Country
             </label>
 
             <input
               type="text"
               value={county}
               onChange={(e) => setCounty(e.target.value)}
-              placeholder="Example: Montserrado"
+              placeholder="Example: Liberia"
               className="w-full border rounded-lg p-3"
             />
           </div>
@@ -438,38 +507,42 @@ profile_url: `/leaders/${createSlug(name)}`,
             />
           </div>
 
-          {/* Image */}
+          {/* Profile Image */}
           <div className="md:col-span-2">
             <label className="block font-semibold mb-2">
-  Profile Image
-</label>
+              Profile Image
+            </label>
 
-<input
-  ref={imageInputRef}
-  type="file"
-  accept="image/*"
-  onChange={uploadProfileImage}
-  hidden
-/>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              onChange={uploadProfileImage}
+              hidden
+            />
 
-<button
-  type="button"
-  onClick={() => imageInputRef.current?.click()}
-  disabled={uploadingImage}
-  className="bg-green-700 text-white px-5 py-3 rounded-lg hover:bg-green-800 disabled:opacity-50"
->
-  {uploadingImage ? "Uploading..." : "📷 Add Image"}
-</button>
+            <button
+              type="button"
+              onClick={() =>
+                imageInputRef.current?.click()
+              }
+              disabled={uploadingImage}
+              className="bg-green-700 text-white px-5 py-3 rounded-lg hover:bg-green-800 disabled:opacity-50"
+            >
+              {uploadingImage
+                ? "Uploading..."
+                : "Add Image"}
+            </button>
 
-{imageUrl && (
-  <div className="mt-3">
-    <img
-      src={imageUrl}
-      alt="Profile preview"
-      className="w-32 h-32 object-cover rounded-lg border"
-    />
-  </div>
-)}
+            {imageUrl && (
+              <div className="mt-3">
+                <img
+                  src={imageUrl}
+                  alt="Profile preview"
+                  className="w-32 h-32 object-cover rounded-lg border"
+                />
+              </div>
+            )}
           </div>
 
           {/* Publish */}
@@ -478,7 +551,9 @@ profile_url: `/leaders/${createSlug(name)}`,
               id="person-published"
               type="checkbox"
               checked={published}
-              onChange={(e) => setPublished(e.target.checked)}
+              onChange={(e) =>
+                setPublished(e.target.checked)
+              }
               className="w-5 h-5"
             />
 
@@ -532,7 +607,6 @@ profile_url: `/leaders/${createSlug(name)}`,
       <div className="bg-white rounded-xl shadow-sm border p-6">
 
         <div className="flex items-center justify-between mb-6">
-
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
               People
@@ -540,10 +614,12 @@ profile_url: `/leaders/${createSlug(name)}`,
 
             <p className="text-sm text-gray-500 mt-1">
               {people.length}{" "}
-              {people.length === 1 ? "person" : "people"} in the database
+              {people.length === 1
+                ? "person"
+                : "people"}{" "}
+              in the database
             </p>
           </div>
-
         </div>
 
         {people.length === 0 ? (
@@ -572,17 +648,21 @@ profile_url: `/leaders/${createSlug(name)}`,
                     <div className="flex flex-wrap gap-3 text-sm text-gray-500 mt-2">
 
                       {person.role && (
-                        <span>👑 {person.role}</span>
+                        <span>
+                          {person.role}
+                        </span>
                       )}
 
                       {person.era && (
-                        <span>🕰️ {person.era}</span>
+                        <span>
+                          {person.era}
+                        </span>
                       )}
 
                       <span>
                         {person.published
-                          ? "🟢 Published"
-                          : "⚪ Draft"}
+                          ? "Published"
+                          : "Draft"}
                       </span>
 
                     </div>
@@ -592,14 +672,15 @@ profile_url: `/leaders/${createSlug(name)}`,
                         {person.short_bio}
                       </p>
                     )}
-
                   </div>
 
                   <div className="flex flex-wrap gap-2">
 
                     <button
                       type="button"
-                      onClick={() => editPerson(person)}
+                      onClick={() =>
+                        editPerson(person)
+                      }
                       className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700"
                     >
                       Edit
@@ -607,7 +688,9 @@ profile_url: `/leaders/${createSlug(name)}`,
 
                     <button
                       type="button"
-                      onClick={() => togglePublished(person)}
+                      onClick={() =>
+                        togglePublished(person)
+                      }
                       className="bg-yellow-500 text-black px-3 py-2 rounded-lg hover:bg-yellow-600"
                     >
                       {person.published
@@ -617,7 +700,9 @@ profile_url: `/leaders/${createSlug(name)}`,
 
                     <button
                       type="button"
-                      onClick={() => deletePerson(person.id)}
+                      onClick={() =>
+                        deletePerson(person.id)
+                      }
                       className="bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700"
                     >
                       Delete
@@ -626,13 +711,11 @@ profile_url: `/leaders/${createSlug(name)}`,
                   </div>
 
                 </div>
-
               </div>
             ))}
 
           </div>
         )}
-
       </div>
 
     </div>
