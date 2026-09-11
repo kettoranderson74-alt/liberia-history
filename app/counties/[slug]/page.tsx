@@ -53,24 +53,53 @@ function renderText(text: string | null) {
   });
 }
 
-export default async function BomiPage() {
-  const { data: county, error } = await supabase
-    .from("counties")
-    .select("*")
-    .eq("slug", "bomi-county")
-    .eq("published", true)
-    .single();
+type CountyPageProps = {
+  params: Promise<{
+    slug: string;
+  }>;
+};
 
+export default async function CountyPage({
+  params,
+}: CountyPageProps) {
+  const { slug } = await params;
+
+ const countySlugMap: Record<string, string> = {
+  bomi: "bomi-county",
+  bong: "bong-county",
+  gbarpolu: "gbarpolu-county",
+  "grand-bassa": "grand-bassa-county",
+  "grand-cape-mount": "grand-cape-mount-county",
+  "grand-gedeh": "grand-gedeh-county",
+  "grand-kru": "grand-kru-county",
+  lofa: "lofa-county",
+  margibi: "margibi-county",
+  maryland: "maryland-county",
+  montserrado: "montserrado-county",
+  nimba: "nimba-county",
+  rivercess: "river-cess-county",
+  rivergee: "river-gee-county",
+  sinoe: "sinoe-county",
+};
+
+const databaseSlug = countySlugMap[slug] || slug;
+
+const { data: county, error } = await supabase
+  .from("counties")
+  .select("*")
+  .eq("slug", databaseSlug)
+  .eq("published", true)
+  .single();
   if (error || !county) {
     return (
       <main className="min-h-screen bg-gray-50 p-10">
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow p-8 text-center">
           <h1 className="text-3xl font-bold text-red-600">
-            Bomi County Not Found
+            County Not Found
           </h1>
 
           <p className="mt-4 text-gray-600">
-            Bomi County could not be loaded at this time.
+            This county could not be loaded at this time.
           </p>
 
           <Link
@@ -135,14 +164,14 @@ export default async function BomiPage() {
 
           {/* Mining */}
           <h2 className="text-3xl font-bold mt-10">
-            Iron Ore Mining and Economic History
+            Mining and Mineral Economy
           </h2>
 
           {renderText(county.mining_economy)}
 
-          {/* Tubmanburg */}
+          {/* Description */}
           <h2 className="text-3xl font-bold mt-10">
-            Tubmanburg
+            About {county.name}
           </h2>
 
           {renderText(county.description)}
@@ -191,7 +220,7 @@ export default async function BomiPage() {
 
           {/* Civil War */}
           <h2 className="text-3xl font-bold mt-10">
-            Bomi During Liberia's Civil Wars
+            {county.name} During Liberia's Civil Wars
           </h2>
 
           {renderText(county.civil_war_history)}
@@ -206,7 +235,7 @@ export default async function BomiPage() {
               <p className="mt-4 text-lg text-gray-800 leading-relaxed">
                 Liberia's 2022 National Population and Housing Census
                 recorded a population of{" "}
-                <strong>{county.population}</strong> in Bomi County.
+                <strong>{county.population}</strong> in {county.name}.
               </p>
 
               <p className="mt-4 text-lg text-gray-800 leading-relaxed">
@@ -238,7 +267,7 @@ export default async function BomiPage() {
 
           {/* Key Facts */}
           <h2 className="text-3xl font-bold mt-10">
-            Key Facts About Bomi County
+            Key Facts About {county.name}
           </h2>
 
           {renderList(county.key_facts)}
