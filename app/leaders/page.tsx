@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,7 @@ export default async function LeadersPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      {/* Header */}
       <section className="bg-green-700 text-white py-16 px-6 text-center">
         <h1 className="text-4xl font-bold">
           Liberia's Presidents & Leaders
@@ -37,58 +39,75 @@ export default async function LeadersPage() {
         </p>
       </section>
 
+      {/* Leaders */}
       <section className="max-w-6xl mx-auto py-12 px-6">
         {people && people.length > 0 ? (
           <div className="grid md:grid-cols-3 gap-8">
-            {people.map((leader) => (
-              <a
-                key={leader.id}
-                href={leader.profile_url || `/leaders/${leader.slug}`}
-                className="bg-white rounded-xl shadow hover:shadow-xl overflow-hidden transition block"
-              >
-                <div className="h-72 bg-gray-200 overflow-hidden">
-                  {leader.image_url ? (
-                    <Image
-                      src={leader.image_url}
-                      alt={leader.name}
-                      width={500}
-                      height={600}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500">
-                      No image available
+            {people.map((leader) => {
+              const profileUrl =
+                leader.profile_url || `/leaders/${leader.slug}`;
+
+              return (
+                <article
+                  key={leader.id}
+                  className="bg-white rounded-xl shadow hover:shadow-xl overflow-hidden transition"
+                >
+                  {/* Featured Image */}
+                  <Link href={profileUrl} className="block">
+                    <div className="relative h-72 bg-gray-200 overflow-hidden">
+                      {leader.image_url ? (
+                       <img
+  src={leader.image_url}
+  alt={`${leader.name} - Liberian historical leader`}
+  className="w-full h-full object-cover"
+  loading="lazy"
+/>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-500">
+                          No image available
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </Link>
 
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-green-700">
-                    {leader.name}
-                  </h2>
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <Link href={profileUrl}>
+                      <h2 className="text-2xl font-bold text-green-700 hover:text-green-800">
+                        {leader.name}
+                      </h2>
+                    </Link>
 
-                  {leader.leadership_years && (
-                    <p className="font-semibold mt-2 text-gray-700">
-                      {leader.leadership_years}
-                    </p>
-                  )}
+                    {leader.leadership_years && (
+                      <p className="font-semibold mt-2 text-gray-700">
+                        {leader.leadership_years}
+                      </p>
+                    )}
 
-                  {leader.role && (
-                    <p className="mt-2 text-gray-600">
-                      {leader.role}
-                    </p>
-                  )}
+                    {leader.role && (
+                      <p className="mt-2 text-gray-600">
+                        {leader.role}
+                      </p>
+                    )}
 
-                  <p className="mt-3 text-gray-700">
-                    {leader.short_bio || leader.description || ""}
-                  </p>
+                    {/* Short Biography Only */}
+                    {leader.short_bio && (
+                      <p className="mt-3 text-gray-700 line-clamp-4">
+                        {leader.short_bio}
+                      </p>
+                    )}
 
-                  <p className="mt-5 text-green-700 font-bold">
-                    View Profile →
-                  </p>
-                </div>
-              </a>
-            ))}
+                    {/* Read More */}
+                    <Link
+                      href={profileUrl}
+                      className="inline-block mt-5 text-green-700 font-bold hover:text-green-900"
+                    >
+                      Read More →
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-16">
