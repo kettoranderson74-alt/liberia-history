@@ -1,22 +1,27 @@
 
 import Link from "next/link";
+import NextImage from "next/image";
+
 import { supabase } from "@/lib/supabase";
+
 import { liberiaHistoryEvents } from "../lib/liberia-history-events";
 
 export default async function Home() {
-  const { data: latestArticles } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", { ascending: false })
-    .limit(6);
+ const [{ data: latestArticles }, { data: counties }] =
+  await Promise.all([
+    supabase
+      .from("articles")
+      .select("slug, title, image_url, content")
+      .eq("published", true)
+      .order("created_at", { ascending: false })
+      .limit(6),
 
-  const { data: counties } = await supabase
-    .from("counties")
-    .select("name, slug, description, image_url")
-    .eq("published", true)
-    .order("name", { ascending: true });
-
+    supabase
+      .from("counties")
+      .select("name, slug, description, image_url")
+      .eq("published", true)
+      .order("name", { ascending: true }),
+  ]);
   const countyDescriptions: Record<string, string> = {
     Bomi:
       "Bomi is known for its historic iron-ore industry, especially around Tubmanburg, and its important place in Liberia's mining and economic history.",
@@ -120,12 +125,15 @@ export default async function Home() {
 
       {/* Hero */}
       <section className="relative min-h-[600px] flex items-center overflow-hidden">
-        <img
-          src="/images/liberia-hero.webp"
-          alt="Liberia historical heritage"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
 
+<NextImage
+  src="/images/liberia-hero.webp"
+  alt="Liberia historical heritage"
+  fill
+  priority
+  sizes="100vw"
+  className="object-cover"
+/>
         <div className="absolute inset-0 bg-black/50"></div>
 
         <div className="relative z-10 max-w-4xl px-6 text-white">
@@ -169,12 +177,16 @@ export default async function Home() {
               className="bg-white rounded-xl shadow p-6"
             >
               {article.image_url && (
-                <img
-                  src={article.image_url}
-                  alt={article.title}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-              )}
+  <div className="relative w-full h-48 mb-4">
+    <NextImage
+      src={article.image_url}
+      alt={article.title}
+      fill
+      sizes="(max-width: 768px) 100vw, 33vw"
+      className="object-cover rounded-lg"
+    />
+  </div>
+)}
 
               <h3 className="text-xl font-bold">
                 {article.title}
@@ -356,12 +368,14 @@ export default async function Home() {
                 history and culture.
               </p>
 
-              <img
-                src="/images/liberia-map.png"
-                alt="Liberia Counties Map"
-                className="mt-6 mx-auto rounded-lg shadow-lg"
-              />
-
+              <NextImage
+  src="/images/liberia-map.png"
+  alt="Liberia Counties Map"
+  width={1200}
+  height={800}
+  sizes="(max-width: 768px) 100vw, 1200px"
+  className="mt-6 mx-auto rounded-lg shadow-lg h-auto"
+/>
               {/* Counties */}
               <div className="mt-10 grid md:grid-cols-3 gap-6">
                 {counties?.map((county) => (
@@ -376,19 +390,21 @@ export default async function Home() {
                     }
                     className="bg-white rounded-xl shadow hover:shadow-xl transition overflow-hidden block"
                   >
-                    <div className="h-40 bg-gray-200 overflow-hidden">
-                      {county.image_url ? (
-                        <img
-                          src={county.image_url}
-                          alt={`${county.name} County`}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
-                          No image available
-                        </div>
-                      )}
-                    </div>
+                    <div className="relative h-40 bg-gray-200 overflow-hidden">
+  {county.image_url ? (
+    <NextImage
+      src={county.image_url}
+      alt={`${county.name} County`}
+      fill
+      sizes="(max-width: 768px) 100vw, 33vw"
+      className="object-cover"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center text-gray-500">
+      No image available
+    </div>
+  )}
+</div>
 
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-green-700">

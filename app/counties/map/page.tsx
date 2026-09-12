@@ -52,10 +52,10 @@ export default function CountiesMapPage() {
 <div className="mb-10 text-center">
 
   <img
-    src="/images/liberia-map.png"
-    alt="Map of Liberia Counties"
-    className="mx-auto rounded-xl shadow-lg"
-  />
+  src="/images/liberia-map.jpg"
+  alt="Liberia Counties Map"
+  className="mt-6 mx-auto rounded-lg shadow-lg"
+/>
 
   <p className="mt-4 text-gray-700">
     Explore Liberia's counties and learn about their history and culture.
