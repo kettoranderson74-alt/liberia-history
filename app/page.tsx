@@ -369,7 +369,7 @@ export default async function Home() {
               </p>
 
               <NextImage
-  src="/images/liberia-map.png"
+ src="/images/liberia-map.jpg"
   alt="Liberia Counties Map"
   width={1200}
   height={800}
