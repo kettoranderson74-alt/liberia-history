@@ -43,7 +43,11 @@ export const metadata: Metadata = {
 
   creator: "Liberia History",
   publisher: "Liberia History",
-
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   metadataBase: new URL(
     "https://liberia-history-liberia.vercel.app"
   ),
