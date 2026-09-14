@@ -37,8 +37,7 @@ export default async function CultureArticlePage({
       </section>
 
       <section className="max-w-5xl mx-auto py-12 px-6">
-        <article className="bg-white rounded-xl shadow-sm border p-6 md:p-10">
-
+        <article className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           {!featuredImageAlreadyInContent &&
             culture.featured_image && (
               <img
@@ -78,7 +77,7 @@ export default async function CultureArticlePage({
               line-height: 1.3;
               margin-top: 2.5rem;
               margin-bottom: 1.25rem;
-              color: #166534;
+              color: #000000;
             }
 
             .culture-article h2 {
@@ -87,7 +86,7 @@ export default async function CultureArticlePage({
               line-height: 1.4;
               margin-top: 2.5rem;
               margin-bottom: 1rem;
-              color: #166534;
+             color: #000000;
             }
 
             .culture-article h3 {
@@ -96,7 +95,7 @@ export default async function CultureArticlePage({
               line-height: 1.4;
               margin-top: 2rem;
               margin-bottom: 0.75rem;
-              color: #166534;
+              color: #000000;
             }
 
             .culture-article ul,
