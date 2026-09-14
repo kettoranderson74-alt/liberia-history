@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -34,7 +33,7 @@ export default function Editor({
     editorProps: {
       attributes: {
         class:
-          "ProseMirror min-h-[300px] w-full outline-none cursor-text leading-8",
+          "ProseMirror min-h-[300px] w-full outline-none cursor-text",
       },
     },
 
@@ -244,83 +243,11 @@ export default function Editor({
 
         <EditorContent
           editor={editor}
-          className="culture-editor"
+          className="prose prose-lg max-w-none"
         />
-
-        <style jsx global>{`
-          .culture-editor .ProseMirror {
-            min-height: 300px;
-            outline: none;
-            font-size: 1.125rem;
-            line-height: 1.8;
-          }
-
-          .culture-editor .ProseMirror p {
-            margin-top: 0;
-            margin-bottom: 1.25rem;
-          }
-
-          .culture-editor .ProseMirror p:last-child {
-            margin-bottom: 0;
-          }
-
-          .culture-editor .ProseMirror h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-          }
-
-          .culture-editor .ProseMirror h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-          }
-
-          .culture-editor .ProseMirror h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-          }
-
-          .culture-editor .ProseMirror ul,
-          .culture-editor .ProseMirror ol {
-            margin-top: 0.75rem;
-            margin-bottom: 1.25rem;
-            padding-left: 1.5rem;
-          }
-
-          .culture-editor .ProseMirror li {
-            margin-bottom: 0.4rem;
-          }
-
-          .culture-editor .ProseMirror blockquote {
-            margin: 1.5rem 0;
-            padding-left: 1rem;
-            border-left: 4px solid #d1d5db;
-          }
-
-          .culture-editor .ProseMirror img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 1.5rem auto;
-            border-radius: 0.5rem;
-          }
-
-          .culture-editor .ProseMirror > *:first-child {
-            margin-top: 0;
-          }
-        `}</style>
 
       </div>
 
     </div>
   );
 }
-
