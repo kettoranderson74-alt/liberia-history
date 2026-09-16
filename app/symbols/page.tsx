@@ -1,4 +1,5 @@
-import Link from "next/link";
+
+export const dynamic = "force-dynamic";import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default async function SymbolsPage() {
