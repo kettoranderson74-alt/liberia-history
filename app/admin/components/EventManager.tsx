@@ -12,6 +12,7 @@ type HistoricalEvent = {
   summary: string | null;
   description: string | null;
   image_url: string | null;
+  article_url: string | null;
   published: boolean;
 };
 
@@ -24,6 +25,7 @@ export default function EventManager() {
   const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [articleUrl, setArticleUrl] = useState("");
   const [published, setPublished] = useState(true);
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -64,6 +66,7 @@ export default function EventManager() {
     setSummary("");
     setDescription("");
     setImageUrl("");
+    setArticleUrl("");
     setPublished(true);
     setEditingId(null);
   }
@@ -76,6 +79,7 @@ export default function EventManager() {
     setSummary(event.summary || "");
     setDescription(event.description || "");
     setImageUrl(event.image_url || "");
+    setArticleUrl(event.article_url || "");
     setPublished(event.published);
 
     setMessage("Editing event...");
@@ -98,6 +102,7 @@ export default function EventManager() {
       summary: summary.trim() || null,
       description: description.trim() || null,
       image_url: imageUrl.trim() || null,
+      article_url: articleUrl.trim() || null,
       published,
     };
 
@@ -126,8 +131,8 @@ export default function EventManager() {
 
     setMessage(
       editingId
-        ? "✅ Event updated successfully!"
-        : "✅ Event added successfully!"
+        ? "Event updated successfully!"
+        : "Event added successfully!"
     );
 
     resetForm();
@@ -153,7 +158,7 @@ export default function EventManager() {
       return;
     }
 
-    setMessage("✅ Event deleted successfully!");
+    setMessage("Event deleted successfully!");
 
     await loadEvents();
   }
@@ -185,6 +190,7 @@ export default function EventManager() {
 
       {/* Event Form */}
       <div className="bg-white rounded-xl shadow-sm border p-6">
+
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-green-800">
@@ -298,6 +304,26 @@ export default function EventManager() {
             />
           </div>
 
+          {/* Article URL */}
+          <div className="md:col-span-2">
+            <label className="block font-semibold mb-2">
+              Existing Article URL
+            </label>
+
+            <input
+              type="text"
+              value={articleUrl}
+              onChange={(e) => setArticleUrl(e.target.value)}
+              placeholder="/articles/liberia-independence"
+              className="w-full border rounded-lg p-3"
+            />
+
+            <p className="text-sm text-gray-500 mt-2">
+              Enter the URL of the existing article visitors should read
+              when they click "Read More."
+            </p>
+          </div>
+
           {/* Published */}
           <div className="md:col-span-2 flex items-center gap-3">
             <input
@@ -312,6 +338,7 @@ export default function EventManager() {
               Publish this event on the website
             </label>
           </div>
+
         </div>
 
         <div className="flex gap-3 mt-6">
@@ -338,6 +365,7 @@ export default function EventManager() {
               Clear
             </button>
           )}
+
         </div>
 
         {message && (
@@ -345,6 +373,7 @@ export default function EventManager() {
             {message}
           </p>
         )}
+
       </div>
 
       {/* Events List */}
@@ -370,36 +399,41 @@ export default function EventManager() {
           </div>
         ) : (
           <div className="space-y-4">
+
             {events.map((event) => (
               <div
                 key={event.id}
                 className="border rounded-xl p-5"
               >
+
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
                   <div className="min-w-0">
+
                     <h3 className="text-xl font-bold text-green-800">
                       {event.title}
                     </h3>
 
                     <div className="flex flex-wrap gap-3 text-sm text-gray-500 mt-2">
+
                       {event.year && (
                         <span>
-                          📅 {event.year}
+                          {event.year}
                         </span>
                       )}
 
                       {event.event_date && (
                         <span>
-                          🗓️ {event.event_date}
+                          {event.event_date}
                         </span>
                       )}
 
                       <span>
                         {event.published
-                          ? "🟢 Published"
-                          : "⚪ Draft"}
+                          ? "Published"
+                          : "Draft"}
                       </span>
+
                     </div>
 
                     {event.summary && (
@@ -407,6 +441,13 @@ export default function EventManager() {
                         {event.summary}
                       </p>
                     )}
+
+                    {event.article_url && (
+                      <p className="text-sm text-blue-600 mt-2 break-all">
+                        Article: {event.article_url}
+                      </p>
+                    )}
+
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -438,12 +479,17 @@ export default function EventManager() {
                     </button>
 
                   </div>
+
                 </div>
+
               </div>
             ))}
+
           </div>
         )}
+
       </div>
+
     </div>
   );
 }
