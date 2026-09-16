@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function SymbolArticlePage({
   params,
 }: {
@@ -36,18 +38,46 @@ export default async function SymbolArticlePage({
       </section>
 
       <section className="max-w-5xl mx-auto py-12 px-6">
-        <article className="bg-white rounded-xl shadow-sm border p-6 md:p-10">
+        <article className="p-0">
           {!featuredImageAlreadyInContent &&
             symbol.featured_image && (
               <img
                 src={symbol.featured_image}
                 alt={symbol.title}
-                className="w-full max-h-[550px] object-cover rounded-xl mb-8"
+                className="w-full max-h-[550px] object-cover rounded-xl mb-10"
               />
             )}
 
           <div
-            className="prose prose-lg max-w-none"
+            className="
+              prose
+              prose-lg
+              max-w-none
+
+              [&_p]:mb-6
+              [&_p]:leading-8
+
+              [&_h2]:mt-10
+              [&_h2]:mb-4
+              [&_h2]:text-3xl
+              [&_h2]:font-bold
+
+              [&_h3]:mt-8
+              [&_h3]:mb-3
+              [&_h3]:text-2xl
+              [&_h3]:font-bold
+
+              [&_ul]:my-6
+              [&_ol]:my-6
+              [&_li]:mb-2
+
+              [&_a]:text-blue-600
+              [&_a]:underline
+              [&_a:hover]:text-blue-800
+
+              [&_img]:rounded-xl
+              [&_img]:my-8
+            "
             dangerouslySetInnerHTML={{
               __html: content,
             }}
