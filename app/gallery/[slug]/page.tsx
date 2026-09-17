@@ -18,8 +18,8 @@ export default async function GalleryArticlePage({
     .single();
 
   if (error || !galleryItem) {
-    notFound();
-  }
+  notFound();
+}
 
   const content = galleryItem.content || "";
 
