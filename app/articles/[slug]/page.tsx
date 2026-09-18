@@ -1,10 +1,14 @@
+
 import Image from "next/image";
 import Link from "next/link";
-import { createSEO } from "@/lib/seo";
+import type { Metadata } from "next";
+import { createSEO } from "@/app/seo";
 import { supabase } from "@/lib/supabase";
 import Comments from "@/app/components/Comments";
 import ScrollToHash from "@/app/components/ScrollToHash";
+
 export const dynamic = "force-dynamic";
+
 function addHeadingIds(content: string) {
   return content.replace(
     /<h([2-3])>(.*?)<\/h\1>/g,
@@ -62,70 +66,18 @@ export async function generateMetadata({
   });
 }
 
-  const plainText = article.content
-    .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  const description =
-    plainText.length > 160
-      ? plainText.substring(0, 157) + "..."
-      : plainText;
-
-  const articleUrl = `https://liberia-history-liberia.vercel.app/articles/${article.slug}`;
-
-  const featuredImage =
-    article.image_url ||
-    "https://liberia-history-liberia.vercel.app/liberia-hero.png";
-
-  return {
-    title: article.title,
-    description,
-
-    openGraph: {
-      title: article.title,
-      description,
-      url: articleUrl,
-      siteName: "Liberia History",
-      locale: "en_US",
-      type: "article",
-
-      images: [
-        {
-          url: featuredImage,
-          width: 1600,
-          height: 900,
-          alt: article.title,
-        },
-      ],
-    },
-
-    twitter: {
-      card: "summary_large_image",
-      title: article.title,
-      description,
-      images: [featuredImage],
-    },
-  };
-}
-
-
 export default async function ArticleDetail({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-
   const { slug } = await params;
-
 
   const { data: article, error } = await supabase
     .from("articles")
     .select("*")
     .eq("slug", slug)
     .single();
-
-
 
   if (error || !article) {
     return (
@@ -137,8 +89,6 @@ export default async function ArticleDetail({
     );
   }
 
-
-
   const { data: relatedArticles } = await supabase
     .from("articles")
     .select("*")
@@ -146,230 +96,184 @@ export default async function ArticleDetail({
     .neq("slug", article.slug)
     .limit(3);
 
+  const plainText = article.content
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
+  const articleUrl = `https://liberia-history-liberia.vercel.app/articles/${article.slug}`;
+
+  const featuredImage =
+    article.image_url ||
+    "https://liberia-history-liberia.vercel.app/logo.png";
 
   const schema = {
- "@context":"https://schema.org",
- "@type":"Article",
+    "@context": "https://schema.org",
+    "@type": "Article",
 
- headline: article.title,
+    headline: article.title,
 
- description: article.content
- .replace(/<[^>]*>/g,"")
- .replace(/\s+/g," ")
- .trim()
- .substring(0,160),
+    description:
+      plainText.length > 160
+        ? plainText.substring(0, 157) + "..."
+        : plainText,
 
- image:[
-  article.image_url ||
-  "https://liberia-history-liberia.vercel.app/logo.png"
- ],
+    image: [featuredImage],
 
- datePublished: article.created_at,
+    datePublished: article.created_at,
 
- author:{
-  "@type":"Organization",
-  name:"Liberia History"
- },
+    author: {
+      "@type": "Organization",
+      name: "Liberia History",
+    },
 
- publisher:{
-  "@type":"Organization",
-  name:"Liberia History",
-  logo:{
-   "@type":"ImageObject",
-   url:"https://liberia-history-liberia.vercel.app/logo.png"
-  }
- },
+    publisher: {
+      "@type": "Organization",
+      name: "Liberia History",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://liberia-history-liberia.vercel.app/logo.png",
+      },
+    },
 
- mainEntityOfPage:{
-  "@type":"WebPage",
-  "@id":`https://liberia-history-liberia.vercel.app/articles/${article.slug}`
- }
-
-};
-
-
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+  };
 
   return (
-  <>
-    <ScrollToHash />
+    <>
+      <ScrollToHash />
 
-    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50 py-10 px-4 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schema),
-        }}
-      />
+      <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50 py-10 px-4 sm:px-6">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
 
+        <article className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow overflow-hidden">
+          {article.image_url && (
+            <Image
+              src={article.image_url}
+              alt={article.title}
+              width={1200}
+              height={600}
+              className="w-full h-[400px] object-cover"
+            />
+          )}
 
-      <article className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow overflow-hidden">
-
-
-        {article.image_url && (
-          <Image
-            src={article.image_url}
-            alt={article.title}
-            width={1200}
-            height={600}
-            className="w-full h-[400px] object-cover"
-          />
-        )}
-
-
-        <div className="p-8">
-
-
-          <div className="mb-4">
-            <span className="bg-green-700 text-white px-4 py-1 rounded-full text-sm">
-              {article.category}
-            </span>
-          </div>
-
-
-          <h1 className="text-4xl font-bold text-green-700 mb-4">
-            {article.title}
-          </h1>
-
-
-          <p className="text-gray-500 mb-8">
-            Published {new Date(article.created_at).toDateString()}
-          </p>
-
-
-          
-
-<div
-className="prose prose-lg max-w-none w-full min-w-0 break-words overflow-x-hidden [&_p]:mb-5 [&_p:empty]:min-h-[1.5rem] [&_img]:max-w-full [&_img]:h-auto [&_table]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_a]:break-words"
-  dangerouslySetInnerHTML={{
-    __html: addHeadingIds(article.content),
-  }}
-/>
-                    <div className="mt-10 border-t pt-6">
-
-            <h3 className="text-2xl font-bold text-green-700 mb-4">
-              Share this article 🇱🇷
-            </h3>
-
-
-            <div className="flex flex-wrap gap-4">
-
-
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://liberia-history-liberia.vercel.app/articles/${article.slug}`)}`}
-                target="_blank"
-                className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"
-              >
-                Share on Facebook
-              </a>
-
-
-
-              <a
-                href={`https://wa.me/?text=${encodeURIComponent(article.title + " https://liberia-history-liberia.vercel.app/articles/" + article.slug)}`}
-                target="_blank"
-                className="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold"
-              >
-                Share on WhatsApp
-              </a>
-
-
-
-              <a
-                href={`mailto:?subject=${encodeURIComponent(article.title)}&body=${encodeURIComponent(`Read this Liberia History article: https://liberia-history-liberia.vercel.app/articles/${article.slug}`)}`}
-                className="bg-gray-700 text-white px-5 py-2 rounded-lg font-semibold"
-              >
-                Email
-              </a>
-
-
+          <div className="p-8">
+            <div className="mb-4">
+              <span className="bg-green-700 text-white px-4 py-1 rounded-full text-sm">
+                {article.category}
+              </span>
             </div>
 
+            <h1 className="text-4xl font-bold text-green-700 mb-4">
+              {article.title}
+            </h1>
+
+            <p className="text-gray-500 mb-8">
+              Published{" "}
+              {new Date(article.created_at).toDateString()}
+            </p>
+
+            <div
+              className="prose prose-lg max-w-none w-full min-w-0 break-words overflow-x-hidden [&_p]:mb-5 [&_p:empty]:min-h-[1.5rem] [&_img]:max-w-full [&_img]:h-auto [&_table]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_a]:break-words"
+              dangerouslySetInnerHTML={{
+                __html: addHeadingIds(article.content),
+              }}
+            />
+
+            <div className="mt-10 border-t pt-6">
+              <h3 className="text-2xl font-bold text-green-700 mb-4">
+                Share this article
+              </h3>
+
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    articleUrl
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"
+                >
+                  Share on Facebook
+                </a>
+
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(
+                    article.title + " " + articleUrl
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold"
+                >
+                  Share on WhatsApp
+                </a>
+
+                <a
+                  href={`mailto:?subject=${encodeURIComponent(
+                    article.title
+                  )}&body=${encodeURIComponent(
+                    `Read this Liberia History article: ${articleUrl}`
+                  )}`}
+                  className="bg-gray-700 text-white px-5 py-2 rounded-lg font-semibold"
+                >
+                  Email
+                </a>
+              </div>
+            </div>
           </div>
+        </article>
 
-
+        <div className="max-w-4xl mx-auto mt-10">
+          <Comments articleSlug={article.slug} />
         </div>
 
-      </article>
+        {relatedArticles && relatedArticles.length > 0 && (
+          <section className="max-w-4xl mx-auto mt-10">
+            <h2 className="text-3xl font-bold text-green-700 mb-6">
+              Related Articles
+            </h2>
 
+            <div className="grid md:grid-cols-3 gap-6">
+              {relatedArticles.map((related) => (
+                <Link
+                  key={related.slug}
+                  href={`/articles/${related.slug}`}
+                  className="bg-white rounded-xl shadow hover:shadow-lg overflow-hidden"
+                >
+                  {related.image_url && (
+                    <Image
+                      src={related.image_url}
+                      alt={related.title}
+                      width={500}
+                      height={250}
+                      className="w-full h-44 object-cover"
+                    />
+                  )}
 
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg">
+                      {related.title}
+                    </h3>
 
-      <div className="max-w-4xl mx-auto mt-10">
-
-        <Comments articleSlug={article.slug} />
-
-      </div>
-
-
-
-
-      {relatedArticles && relatedArticles.length > 0 && (
-
-        <section className="max-w-4xl mx-auto mt-10">
-
-
-          <h2 className="text-3xl font-bold text-green-700 mb-6">
-            Related Articles
-          </h2>
-
-
-
-          <div className="grid md:grid-cols-3 gap-6">
-
-
-            {relatedArticles.map((related) => (
-
-              <Link
-                key={related.slug}
-                href={`/articles/${related.slug}`}
-                className="bg-white rounded-xl shadow hover:shadow-lg overflow-hidden"
-              >
-
-
-                {related.image_url && (
-
-                  <Image
-                    src={related.image_url}
-                    alt={related.title}
-                    width={500}
-                    height={250}
-                    className="w-full h-44 object-cover"
-                  />
-
-                )}
-
-
-
-                <div className="p-4">
-
-
-                  <h3 className="font-bold text-lg">
-                    {related.title}
-                  </h3>
-
-
-                  <p className="text-green-700 mt-2 text-sm">
-                    {related.category}
-                  </p>
-
-
-                </div>
-
-
-              </Link>
-
-            ))}
-
-
-          </div>
-
-
-        </section>
-
-      )}
-
-
-       </main>
-  </>
+                    <p className="text-green-700 mt-2 text-sm">
+                      {related.category}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+    </>
   );
 }
+
