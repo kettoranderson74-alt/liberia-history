@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import Comments from "@/app/components/Comments";
 import ScrollToHash from "@/app/components/ScrollToHash";
-
+export const dynamic = "force-dynamic";
 function addHeadingIds(content: string) {
   return content.replace(
     /<h([2-3])>(.*?)<\/h\1>/g,
