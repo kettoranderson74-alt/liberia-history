@@ -72,6 +72,25 @@ export async function generateMetadata({
       ? plainText.substring(0, 157) + "..."
       : plainText;
 
+  return createSEO({
+    title: article.title,
+    description,
+    image: article.image_url,
+    url: `/articles/${article.slug}`,
+    type: "article",
+  });
+}
+
+  const plainText = article.content
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const description =
+    plainText.length > 160
+      ? plainText.substring(0, 157) + "..."
+      : plainText;
+
   const articleUrl = `https://liberia-history-liberia.vercel.app/articles/${article.slug}`;
 
   const featuredImage =
