@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Metadata } from "next";
+import { createSEO } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
 import Comments from "@/app/components/Comments";
 import ScrollToHash from "@/app/components/ScrollToHash";
@@ -35,11 +35,32 @@ export async function generateMetadata({
     .single();
 
   if (!article) {
-    return {
-      title: "Article Not Found | Liberia History",
-      description: "The requested Liberia History article could not be found.",
-    };
+    return createSEO({
+      title: "Article Not Found",
+      description:
+        "The requested Liberia History article could not be found.",
+      url: `/articles/${slug}`,
+    });
   }
+
+  const plainText = article.content
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const description =
+    plainText.length > 160
+      ? plainText.substring(0, 157) + "..."
+      : plainText;
+
+  return createSEO({
+    title: article.title,
+    description,
+    image: article.image_url,
+    url: `/articles/${article.slug}`,
+    type: "article",
+  });
+}
 
   const plainText = article.content
     .replace(/<[^>]*>/g, "")
