@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 const SITE_NAME = "Liberia History";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://liberiahistory.com";
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://liberia-history-liberia.vercel.app";
 
 const DEFAULT_DESCRIPTION =
   "Explore Liberia's history, culture, people, places, important events, symbols, and heritage.";
