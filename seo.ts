@@ -9,7 +9,7 @@ const SITE_URL =
 const DEFAULT_DESCRIPTION =
   "Explore Liberia's history, culture, people, places, important events, symbols, and heritage.";
 
-const DEFAULT_IMAGE = `${SITE_URL}/images/liberia-history-og.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/liberia-hero.png`;
 
 type SEOOptions = {
   title: string;
