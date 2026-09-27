@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 import { liberiaHistoryEvents } from "../lib/liberia-history-events";
 import LiberiaInteractiveMap from "./components/LiberiaInteractiveMap";
-
+import SiteNav from "./components/SiteNav";
 export default async function Home() {
   const [{ data: latestArticles }, { data: counties }] =
     await Promise.all([
@@ -682,24 +682,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="px-6 py-5 bg-white shadow">
-        <h1 className="text-2xl font-bold text-green-700 text-center">
-          Liberia History
-        </h1>
-
-        <div className="flex flex-wrap justify-center gap-3 mt-4 text-sm md:text-base text-gray-700">
-          <a href="/">Home</a>
-          <a href="/history">History</a>
-          <a href="/leaders">Leaders</a>
-          <a href="/culture">Culture</a>
-          <a href="/symbols">Symbols</a>
-          <a href="/articles">Articles</a>
-          <a href="/gallery">Gallery</a>
-          <a href="/timeline">Timeline</a>
-          <a href="/search">Search</a>
-          <a href="/about">About</a>
-        </div>
-      </nav>
+<SiteNav />
 
       {/* Hero */}
       <section className="relative min-h-[600px] flex items-center overflow-hidden">
