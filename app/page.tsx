@@ -687,13 +687,14 @@ export default async function Home() {
       {/* Hero */}
       <section className="relative min-h-[600px] flex items-center overflow-hidden">
         <NextImage
-          src="/images/liberia-hero.webp"
-          alt="Liberia historical heritage"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+  src="/images/liberia-hero.webp"
+  alt="Liberia historical heritage"
+  fill
+  priority
+  fetchPriority="high"
+  sizes="100vw"
+  className="object-cover"
+/>
 
         <div className="absolute inset-0 bg-black/50"></div>
 
